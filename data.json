@@ -1,39 +1,279 @@
 {
   "meta": {
     "season": "2026",
-    "lastUpdated": "",
-    "updatedBy": ""
+    "lastUpdated": "2026-03-23T19:16:18.641Z",
+    "updatedBy": "EEKdev"
   },
   "players": [
-    {"rank":1,"name":"N/A","desc":"","roblox":"","discord":"","clanDiscord":"","img":""},
-    {"rank":2,"name":"N/A","desc":"","roblox":"","discord":"","clanDiscord":"","img":""},
-    {"rank":3,"name":"N/A","desc":"","roblox":"","discord":"","clanDiscord":"","img":""},
-    {"rank":4,"name":"N/A","desc":"","roblox":"","discord":"","clanDiscord":"","img":""},
-    {"rank":5,"name":"N/A","desc":"","roblox":"","discord":"","clanDiscord":"","img":""},
-    {"rank":6,"name":"N/A","desc":"","roblox":"","discord":"","clanDiscord":"","img":""},
-    {"rank":7,"name":"N/A","desc":"","roblox":"","discord":"","clanDiscord":"","img":""},
-    {"rank":8,"name":"N/A","desc":"","roblox":"","discord":"","clanDiscord":"","img":""},
-    {"rank":9,"name":"N/A","desc":"","roblox":"","discord":"","clanDiscord":"","img":""},
-    {"rank":10,"name":"N/A","desc":"","roblox":"","discord":"","clanDiscord":"","img":""},
-    {"rank":11,"name":"N/A","desc":"","roblox":"","discord":"","clanDiscord":"","img":""},
-    {"rank":12,"name":"N/A","desc":"","roblox":"","discord":"","clanDiscord":"","img":""},
-    {"rank":13,"name":"N/A","desc":"","roblox":"","discord":"","clanDiscord":"","img":""},
-    {"rank":14,"name":"N/A","desc":"","roblox":"","discord":"","clanDiscord":"","img":""},
-    {"rank":15,"name":"N/A","desc":"","roblox":"","discord":"","clanDiscord":"","img":""},
-    {"rank":16,"name":"N/A","desc":"","roblox":"","discord":"","clanDiscord":"","img":""},
-    {"rank":17,"name":"N/A","desc":"","roblox":"","discord":"","clanDiscord":"","img":""},
-    {"rank":18,"name":"N/A","desc":"","roblox":"","discord":"","clanDiscord":"","img":""},
-    {"rank":19,"name":"N/A","desc":"","roblox":"","discord":"","clanDiscord":"","img":""},
-    {"rank":20,"name":"N/A","desc":"","roblox":"","discord":"","clanDiscord":"","img":""},
-    {"rank":21,"name":"N/A","desc":"","roblox":"","discord":"","clanDiscord":"","img":""},
-    {"rank":22,"name":"N/A","desc":"","roblox":"","discord":"","clanDiscord":"","img":""},
-    {"rank":23,"name":"N/A","desc":"","roblox":"","discord":"","clanDiscord":"","img":""},
-    {"rank":24,"name":"N/A","desc":"","roblox":"","discord":"","clanDiscord":"","img":""},
-    {"rank":25,"name":"N/A","desc":"","roblox":"","discord":"","clanDiscord":"","img":""},
-    {"rank":26,"name":"N/A","desc":"","roblox":"","discord":"","clanDiscord":"","img":""},
-    {"rank":27,"name":"N/A","desc":"","roblox":"","discord":"","clanDiscord":"","img":""},
-    {"rank":28,"name":"N/A","desc":"","roblox":"","discord":"","clanDiscord":"","img":""},
-    {"rank":29,"name":"N/A","desc":"","roblox":"","discord":"","clanDiscord":"","img":""},
-    {"rank":30,"name":"N/A","desc":"","roblox":"","discord":"","clanDiscord":"","img":""}
+    {
+      "rank": 1,
+      "name": "Enes",
+      "desc": "Leader of JJS Germany",
+      "roblox": "https://www.roblox.com/users/2491063930/profile",
+      "discord": "",
+      "clanDiscord": "https://discord.gg/3n45nmgh",
+      "img": ""
+    },
+    {
+      "rank": 2,
+      "name": "N/A",
+      "desc": "",
+      "roblox": "",
+      "discord": "",
+      "clanDiscord": "",
+      "img": ""
+    },
+    {
+      "rank": 3,
+      "name": "N/A",
+      "desc": "",
+      "roblox": "",
+      "discord": "",
+      "clanDiscord": "",
+      "img": ""
+    },
+    {
+      "rank": 4,
+      "name": "N/A",
+      "desc": "",
+      "roblox": "",
+      "discord": "",
+      "clanDiscord": "",
+      "img": ""
+    },
+    {
+      "rank": 5,
+      "name": "N/A",
+      "desc": "",
+      "roblox": "",
+      "discord": "",
+      "clanDiscord": "",
+      "img": ""
+    },
+    {
+      "rank": 6,
+      "name": "N/A",
+      "desc": "",
+      "roblox": "",
+      "discord": "",
+      "clanDiscord": "",
+      "img": ""
+    },
+    {
+      "rank": 7,
+      "name": "N/A",
+      "desc": "",
+      "roblox": "",
+      "discord": "",
+      "clanDiscord": "",
+      "img": ""
+    },
+    {
+      "rank": 8,
+      "name": "N/A",
+      "desc": "",
+      "roblox": "",
+      "discord": "",
+      "clanDiscord": "",
+      "img": ""
+    },
+    {
+      "rank": 9,
+      "name": "N/A",
+      "desc": "",
+      "roblox": "",
+      "discord": "",
+      "clanDiscord": "",
+      "img": ""
+    },
+    {
+      "rank": 10,
+      "name": "N/A",
+      "desc": "",
+      "roblox": "",
+      "discord": "",
+      "clanDiscord": "",
+      "img": ""
+    },
+    {
+      "rank": 11,
+      "name": "N/A",
+      "desc": "",
+      "roblox": "",
+      "discord": "",
+      "clanDiscord": "",
+      "img": ""
+    },
+    {
+      "rank": 12,
+      "name": "N/A",
+      "desc": "",
+      "roblox": "",
+      "discord": "",
+      "clanDiscord": "",
+      "img": ""
+    },
+    {
+      "rank": 13,
+      "name": "N/A",
+      "desc": "",
+      "roblox": "",
+      "discord": "",
+      "clanDiscord": "",
+      "img": ""
+    },
+    {
+      "rank": 14,
+      "name": "N/A",
+      "desc": "",
+      "roblox": "",
+      "discord": "",
+      "clanDiscord": "",
+      "img": ""
+    },
+    {
+      "rank": 15,
+      "name": "N/A",
+      "desc": "",
+      "roblox": "",
+      "discord": "",
+      "clanDiscord": "",
+      "img": ""
+    },
+    {
+      "rank": 16,
+      "name": "N/A",
+      "desc": "",
+      "roblox": "",
+      "discord": "",
+      "clanDiscord": "",
+      "img": ""
+    },
+    {
+      "rank": 17,
+      "name": "N/A",
+      "desc": "",
+      "roblox": "",
+      "discord": "",
+      "clanDiscord": "",
+      "img": ""
+    },
+    {
+      "rank": 18,
+      "name": "N/A",
+      "desc": "",
+      "roblox": "",
+      "discord": "",
+      "clanDiscord": "",
+      "img": ""
+    },
+    {
+      "rank": 19,
+      "name": "N/A",
+      "desc": "",
+      "roblox": "",
+      "discord": "",
+      "clanDiscord": "",
+      "img": ""
+    },
+    {
+      "rank": 20,
+      "name": "N/A",
+      "desc": "",
+      "roblox": "",
+      "discord": "",
+      "clanDiscord": "",
+      "img": ""
+    },
+    {
+      "rank": 21,
+      "name": "N/A",
+      "desc": "",
+      "roblox": "",
+      "discord": "",
+      "clanDiscord": "",
+      "img": ""
+    },
+    {
+      "rank": 22,
+      "name": "N/A",
+      "desc": "",
+      "roblox": "",
+      "discord": "",
+      "clanDiscord": "",
+      "img": ""
+    },
+    {
+      "rank": 23,
+      "name": "N/A",
+      "desc": "",
+      "roblox": "",
+      "discord": "",
+      "clanDiscord": "",
+      "img": ""
+    },
+    {
+      "rank": 24,
+      "name": "N/A",
+      "desc": "",
+      "roblox": "",
+      "discord": "",
+      "clanDiscord": "",
+      "img": ""
+    },
+    {
+      "rank": 25,
+      "name": "N/A",
+      "desc": "",
+      "roblox": "",
+      "discord": "",
+      "clanDiscord": "",
+      "img": ""
+    },
+    {
+      "rank": 26,
+      "name": "N/A",
+      "desc": "",
+      "roblox": "",
+      "discord": "",
+      "clanDiscord": "",
+      "img": ""
+    },
+    {
+      "rank": 27,
+      "name": "N/A",
+      "desc": "",
+      "roblox": "",
+      "discord": "",
+      "clanDiscord": "",
+      "img": ""
+    },
+    {
+      "rank": 28,
+      "name": "N/A",
+      "desc": "",
+      "roblox": "",
+      "discord": "",
+      "clanDiscord": "",
+      "img": ""
+    },
+    {
+      "rank": 29,
+      "name": "N/A",
+      "desc": "",
+      "roblox": "",
+      "discord": "",
+      "clanDiscord": "",
+      "img": ""
+    },
+    {
+      "rank": 30,
+      "name": "N/A",
+      "desc": "",
+      "roblox": "",
+      "discord": "",
+      "clanDiscord": "",
+      "img": ""
+    }
   ]
 }
