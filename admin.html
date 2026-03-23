@@ -30,7 +30,7 @@ input,textarea,select{font-family:inherit}
 .bg-fx{position:fixed;inset:0;pointer-events:none;z-index:0;background:radial-gradient(ellipse 80% 50% at 10% -5%,rgba(204,0,0,0.10) 0%,transparent 55%)}
 .bg-grid{position:fixed;inset:0;pointer-events:none;z-index:0;background-image:linear-gradient(rgba(255,255,255,.014) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.014) 1px,transparent 1px);background-size:52px 52px}
 
-/* ════ LOGIN WALL ════ */
+/* ==== LOGIN WALL ==== */
 #loginWall{position:fixed;inset:0;z-index:600;background:var(--bg);display:flex;align-items:center;justify-content:center;padding:24px}
 .login-box{background:var(--surface);border:1px solid var(--border2);border-radius:var(--radius-lg);padding:40px 36px;width:100%;max-width:420px;box-shadow:0 24px 72px rgba(0,0,0,.7);animation:popIn .3s cubic-bezier(.34,1.56,.64,1)}
 @keyframes popIn{from{opacity:0;transform:scale(.92) translateY(16px)}to{opacity:1;transform:scale(1) translateY(0)}}
@@ -64,7 +64,7 @@ textarea.form-input{resize:vertical;min-height:70px}
 .btn-logout{background:transparent;color:var(--muted);border:1px solid var(--border2);padding:7px 14px;font-size:11px;border-radius:7px}
 .btn-logout:hover{color:var(--danger);border-color:var(--danger)}
 
-/* ════ ADMIN SHELL ════ */
+/* ==== ADMIN SHELL ==== */
 #adminShell{display:none;position:relative;z-index:1;min-height:100vh}
 #adminShell.visible{display:block}
 
@@ -211,7 +211,7 @@ textarea.form-input{resize:vertical;min-height:70px}
 <div class="bg-fx"></div>
 <div class="bg-grid"></div>
 
-<!-- ════ LOGIN WALL ════ -->
+<!-- ==== LOGIN WALL ==== -->
 <div id="loginWall">
   <div class="login-box">
     <div class="login-flag"><s class="lf1"></s><s class="lf2"></s><s class="lf3"></s></div>
@@ -227,12 +227,12 @@ textarea.form-input{resize:vertical;min-height:70px}
       Sign In
     </button>
     <div style="text-align:center;margin-top:18px">
-      <a href="index.html" style="font-family:var(--font-mono);font-size:9px;letter-spacing:2px;color:var(--muted);text-decoration:none">← Back to Leaderboard</a>
+      <a href="index.html" style="font-family:var(--font-mono);font-size:9px;letter-spacing:2px;color:var(--muted);text-decoration:none"><- Back to Leaderboard</a>
     </div>
   </div>
 </div>
 
-<!-- ════ ADMIN SHELL ════ -->
+<!-- ==== ADMIN SHELL ==== -->
 <div id="adminShell">
 
   <!-- TOPBAR -->
@@ -245,7 +245,7 @@ textarea.form-input{resize:vertical;min-height:70px}
       <div class="topbar-right">
         <div class="status-dot" id="statusDot"></div>
         <span class="status-label" id="statusLabel">READY</span>
-        <a href="index.html" class="back-link">← Leaderboard</a>
+        <a href="index.html" class="back-link"><- Leaderboard</a>
         <button class="btn-logout" onclick="doLogout()">Log out</button>
       </div>
     </div>
@@ -255,18 +255,18 @@ textarea.form-input{resize:vertical;min-height:70px}
 
     <!-- SETUP BANNER -->
     <div class="setup-banner" id="setupBanner">
-      <div class="ico">⚙️</div>
+      <div class="ico">[cfg]</div>
       <div>
         <h4>First-time Setup Required</h4>
         <p>
           To save data globally, enter your <strong>GitHub Personal Access Token</strong> and repo details below.
           The token needs <code>repo</code> permission (or <code>contents:write</code> for fine-grained).
-          Your token is stored in <strong>localStorage only</strong> — never transmitted anywhere except to the GitHub API.
+          Your token is stored in <strong>localStorage only</strong>  -  never transmitted anywhere except to the GitHub API.
           <br><br>
-          Create token at: <strong>GitHub → Settings → Developer Settings → Personal Access Tokens</strong>
+          Create token at: <strong>GitHub -> Settings -> Developer Settings -> Personal Access Tokens</strong>
         </p>
       </div>
-      <button class="close-banner" onclick="document.getElementById('setupBanner').style.display='none'">✕</button>
+      <button class="close-banner" onclick="document.getElementById('setupBanner').style.display='none'">x</button>
     </div>
 
     <!-- GITHUB CONFIG PANEL -->
@@ -287,7 +287,7 @@ textarea.form-input{resize:vertical;min-height:70px}
           <input class="form-input" type="password" id="cfgToken" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" autocomplete="off" spellcheck="false">
           <p class="token-note">
             Needs <code style="color:var(--gold);background:var(--surface3);padding:1px 5px;border-radius:3px;font-size:10px">repo</code> scope.
-            <a href="https://github.com/settings/tokens/new" target="_blank">Create token here ↗</a>
+            <a href="https://github.com/settings/tokens/new" target="_blank">Create token here ^</a>
           </p>
         </div>
       </div>
@@ -312,28 +312,28 @@ textarea.form-input{resize:vertical;min-height:70px}
     <!-- PLAYERS PANEL -->
     <div class="players-panel">
       <div class="panel-header">
-        <div class="panel-title">Players (1–30)</div>
+        <div class="panel-title">Players (1-30)</div>
         <div class="panel-actions">
-          <input class="search-box" type="text" id="searchBox" placeholder="Search player…" oninput="filterRows()" autocomplete="off">
+          <input class="search-box" type="text" id="searchBox" placeholder="Search player..." oninput="filterRows()" autocomplete="off">
           <div class="filter-tabs">
             <button class="filter-tab active" onclick="setFilter('all',this)">All</button>
             <button class="filter-tab" onclick="setFilter('filled',this)">Filled</button>
             <button class="filter-tab" onclick="setFilter('vacant',this)">Vacant</button>
-            <button class="filter-tab" onclick="setFilter('10',this)">1–10</button>
-            <button class="filter-tab" onclick="setFilter('20',this)">11–20</button>
-            <button class="filter-tab" onclick="setFilter('30',this)">21–30</button>
+            <button class="filter-tab" onclick="setFilter('10',this)">1-10</button>
+            <button class="filter-tab" onclick="setFilter('20',this)">11-20</button>
+            <button class="filter-tab" onclick="setFilter('30',this)">21-30</button>
           </div>
         </div>
       </div>
 
       <div class="edit-rows" id="editRows">
-        <div style="text-align:center;padding:40px;font-family:var(--font-mono);font-size:11px;color:var(--muted);letter-spacing:2px">LOADING PLAYERS…</div>
+        <div style="text-align:center;padding:40px;font-family:var(--font-mono);font-size:11px;color:var(--muted);letter-spacing:2px">LOADING PLAYERS...</div>
       </div>
 
       <div class="save-all-wrap">
         <div class="save-hint" id="saveHint">Load data to begin editing</div>
         <div style="display:flex;gap:8px;flex-wrap:wrap">
-          <button class="btn btn-ghost btn-sm" onclick="reloadData()">↺ Reload from GitHub</button>
+          <button class="btn btn-ghost btn-sm" onclick="reloadData()">~ Reload from GitHub</button>
           <button class="btn btn-red" onclick="saveAll()" id="saveAllBtn" disabled>
             <svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor"><path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/><path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/></svg>
             Save All to GitHub
@@ -348,16 +348,16 @@ textarea.form-input{resize:vertical;min-height:70px}
 <!-- SAVING OVERLAY -->
 <div class="saving-overlay" id="savingOverlay">
   <div class="save-spinner"></div>
-  <div class="save-text" id="saveOverlayText">Saving to GitHub…</div>
+  <div class="save-text" id="saveOverlayText">Saving to GitHub...</div>
 </div>
 
 <!-- TOAST -->
 <div class="toast" id="toast"></div>
 
 <script>
-// ══════════════════════════════════════════════════════
-//  PASSWORD: SHA-256 of "JJSde2026" — never store plain text
-// ══════════════════════════════════════════════════════
+// ======================================================
+//  PASSWORD: SHA-256 of "JJSde2026"  -  never store plain text
+// ======================================================
 const PASS_HASH = 'e09cd6e1e781c05bdfc0bb34ad9cc39f627cb149fd6c15e278a8e9a8abeda85c';
 
 let players = [];       // working copy
@@ -365,7 +365,7 @@ let origSHA = '';       // current SHA of data.json on GitHub (required for upda
 let filterMode = 'all';
 let isLoggedIn = false;
 
-// ── CONFIG (stored in localStorage) ──────────────────
+// -- CONFIG (stored in localStorage) ------------------
 function getConfig() {
   return {
     owner: localStorage.getItem('jjs_owner') || '',
@@ -382,10 +382,10 @@ function saveConfig() {
   localStorage.setItem('jjs_repo', repo || 'jjs-leaderboard');
   localStorage.setItem('jjs_token', token);
   toast('Configuration saved locally', 'ok');
-  setCfgStatus('idle', 'Saved — click Test to verify');
+  setCfgStatus('idle', 'Saved  -  click Test to verify');
 }
 
-// ── LOGIN ─────────────────────────────────────────────
+// -- LOGIN ---------------------------------------------
 async function sha256(str) {
   const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
   return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
@@ -413,19 +413,19 @@ function doLogout() {
   location.reload();
 }
 
-// ── INIT ADMIN ────────────────────────────────────────
+// -- INIT ADMIN ----------------------------------------
 function initAdmin() {
   const cfg = getConfig();
   if (cfg.owner) {
     document.getElementById('cfgOwner').value = cfg.owner;
     document.getElementById('cfgRepo').value  = cfg.repo;
-    document.getElementById('cfgToken').value = cfg.token ? '••••••••••••••••' : '';
+    document.getElementById('cfgToken').value = cfg.token ? '****************' : '';
     document.getElementById('setupBanner').style.display = 'none';
   }
   loadData();
 }
 
-// ── GITHUB API ────────────────────────────────────────
+// -- GITHUB API ----------------------------------------
 async function ghFetch(path, method='GET', body=null) {
   const cfg = getConfig();
   if (!cfg.token) throw new Error('No GitHub token configured');
@@ -456,7 +456,7 @@ async function loadData() {
     return;
   }
 
-  setStatus('loading','LOADING…','dot-idle');
+  setStatus('loading','LOADING...','dot-idle');
   try {
     const file = await ghFetch(`contents/data.json`);
     origSHA = file.sha;
@@ -479,7 +479,7 @@ async function loadData() {
     console.error(e);
     setStatus('err','ERROR','dot-err');
     toast('Failed to load: ' + e.message, 'err');
-    document.getElementById('saveHint').textContent = 'Error loading — check config';
+    document.getElementById('saveHint').textContent = 'Error loading  -  check config';
     // Still render template
     if (!players.length) {
       players = Array.from({length:30},(_,i)=>({rank:i+1,name:'N/A',desc:'',roblox:'',discord:'',clanDiscord:'',img:''}));
@@ -496,7 +496,7 @@ async function reloadData() {
 async function saveAll() {
   const cfg = getConfig();
   if (!cfg.owner || !cfg.token) { toast('Configure GitHub first', 'err'); return; }
-  showSavingOverlay('Checking file state…');
+  showSavingOverlay('Checking file state...');
   try {
     collectAllInputs();
 
@@ -514,7 +514,7 @@ async function saveAll() {
       origSHA = '';
     }
 
-    showSavingOverlay('Pushing to GitHub…');
+    showSavingOverlay('Pushing to GitHub...');
 
     const payload = {
       meta: {
@@ -538,7 +538,7 @@ async function saveAll() {
     origSHA = res.content.sha;
 
     hideSavingOverlay();
-    toast('✓ Saved to GitHub — live globally!', 'ok');
+    toast('OK Saved to GitHub  -  live globally!', 'ok');
     document.getElementById('saveHint').textContent = `Saved at ${new Date().toLocaleTimeString('de-DE')} · SHA: ${origSHA.slice(0,8)}`;
     setStatus('ok','SAVED','dot-ok');
     updateStats();
@@ -555,13 +555,13 @@ async function testConnection() {
   if (!cfg.owner || !cfg.token) { toast('Fill in username and token first', 'err'); return; }
   // Re-read actual token from input if it was changed
   const tokenInput = document.getElementById('cfgToken').value;
-  if (tokenInput && !tokenInput.startsWith('•')) {
+  if (tokenInput && !tokenInput.startsWith('*')) {
     localStorage.setItem('jjs_token', tokenInput);
   }
-  setCfgStatus('idle','Testing…');
+  setCfgStatus('idle','Testing...');
   try {
     await ghFetch('contents/data.json');
-    setCfgStatus('ok','Connected ✓');
+    setCfgStatus('ok','Connected OK');
     toast('GitHub connection OK!', 'ok');
   } catch(e) {
     setCfgStatus('err','Failed: ' + e.message);
@@ -569,7 +569,7 @@ async function testConnection() {
   }
 }
 
-// ── RENDER ROWS ───────────────────────────────────────
+// -- RENDER ROWS ---------------------------------------
 function renderRows() {
   const container = document.getElementById('editRows');
   container.innerHTML = '';
@@ -588,7 +588,7 @@ function renderRows() {
 
     const hasData = !vacant;
     const rankClass = p.rank===1?'rank1':p.rank===2?'rank2':p.rank===3?'rank3':'';
-    const avContent = p.img ? `<img src="${p.img}" alt="">` : (vacant ? '—' : p.name.charAt(0).toUpperCase());
+    const avContent = p.img ? `<img src="${p.img}" alt="">` : (vacant ? ' - ' : p.name.charAt(0).toUpperCase());
     const linkCount = [p.roblox,p.discord,p.clanDiscord].filter(Boolean).length;
 
     const row = document.createElement('div');
@@ -599,19 +599,19 @@ function renderRows() {
         <div class="row-rank" style="color:${p.rank===1?'var(--gold)':p.rank===2?'#C0C0C0':p.rank===3?'#CD7F32':'var(--muted)'}">#${p.rank}</div>
         <div class="row-av" id="eav-${p.rank}">${avContent}</div>
         <div class="row-info">
-          <div class="row-name${vacant?' na':''}" id="eprev-${p.rank}">${vacant?'N/A — Vacant':escH(p.name)}</div>
+          <div class="row-name${vacant?' na':''}" id="eprev-${p.rank}">${vacant?'N/A  -  Vacant':escH(p.name)}</div>
           <div class="row-meta">${hasData ? `${p.desc||'No description'} · ${linkCount} link${linkCount!==1?'s':''}` : 'Vacant slot'}</div>
         </div>
-        <div class="row-chevron">▼</div>
+        <div class="row-chevron">v</div>
       </div>
       <div class="row-body">
         <div class="img-uploader">
-          <div class="img-preview" id="eprev-img-${p.rank}">${p.img?`<img src="${p.img}" alt="">`:'📷'}</div>
+          <div class="img-preview" id="eprev-img-${p.rank}">${p.img?`<img src="${p.img}" alt="">`:'[img]'}</div>
           <div class="img-upload-right">
             <div class="img-dropzone" id="dz-${p.rank}">
               <input type="file" accept="image/*" onchange="handleImgFile(${p.rank},this)" title="Upload image">
-              <div class="dz-icon">📁</div>
-              <p><strong>Click to upload</strong> or drag & drop<br><span style="font-size:9px;opacity:.6">JPG, PNG, GIF, WebP — max 500KB</span></p>
+              <div class="dz-icon">[+]</div>
+              <p><strong>Click to upload</strong> or drag & drop<br><span style="font-size:9px;opacity:.6">JPG, PNG, GIF, WebP  -  max 500KB</span></p>
             </div>
             <div class="img-url-row">
               <input class="form-input" type="text" id="ef-img-${p.rank}" value="${escA(p.img)}" placeholder="Or paste image URL here" oninput="previewImgUrl(${p.rank})">
@@ -633,20 +633,20 @@ function renderRows() {
               <svg style="width:11px;height:11px;fill:#E53935;vertical-align:middle;margin-right:4px" viewBox="0 0 24 24"><path d="M18.926 23.998 0 18.389 5.075.002 24 5.611zM15.348 10.06l-5.282-1.571-1.57 5.283 5.28 1.572z"/></svg>
               Roblox Profile URL
             </label>
-            <input class="form-input" type="text" id="ef-roblox-${p.rank}" value="${escA(p.roblox)}" placeholder="https://www.roblox.com/users/…">
+            <input class="form-input" type="text" id="ef-roblox-${p.rank}" value="${escA(p.roblox)}" placeholder="https://www.roblox.com/users/...">
           </div>
           <div class="form-group" style="margin:0">
             <label class="form-label">
               <svg style="width:11px;height:11px;fill:#5865F2;vertical-align:middle;margin-right:4px" viewBox="0 0 24 24"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03z"/></svg>
               Discord Profile Link
             </label>
-            <input class="form-input" type="text" id="ef-discord-${p.rank}" value="${escA(p.discord)}" placeholder="https://discord.com/users/…">
+            <input class="form-input" type="text" id="ef-discord-${p.rank}" value="${escA(p.discord)}" placeholder="https://discord.com/users/...">
           </div>
         </div>
         <div class="body-full">
           <div class="form-group" style="margin:0">
-            <label class="form-label">🛡 Clan Discord Server Link</label>
-            <input class="form-input" type="text" id="ef-clan-${p.rank}" value="${escA(p.clanDiscord)}" placeholder="https://discord.gg/…">
+            <label class="form-label">[clan] Clan Discord Server Link</label>
+            <input class="form-input" type="text" id="ef-clan-${p.rank}" value="${escA(p.clanDiscord)}" placeholder="https://discord.gg/...">
           </div>
         </div>
         <div class="row-footer">
@@ -679,7 +679,7 @@ function toggleRow(rank) {
   }
 }
 
-// ── COLLECT INPUTS ────────────────────────────────────
+// -- COLLECT INPUTS ------------------------------------
 function collectAllInputs() {
   players.forEach(p => {
     const nameEl    = document.getElementById(`ef-name-${p.rank}`);
@@ -710,14 +710,14 @@ function collectEntry(rank) {
   // img already updated on upload
 }
 
-// ── SAVE SINGLE ENTRY ─────────────────────────────────
+// -- SAVE SINGLE ENTRY ---------------------------------
 async function saveEntry(rank) {
   collectEntry(rank);
   // Update preview
   const p = players.find(x=>x.rank===rank);
   const vacant = !p.name || p.name==='N/A';
   const prev = document.getElementById(`eprev-${rank}`);
-  if(prev){ prev.textContent = vacant?'N/A — Vacant':p.name; prev.className='row-name'+(vacant?' na':''); }
+  if(prev){ prev.textContent = vacant?'N/A  -  Vacant':p.name; prev.className='row-name'+(vacant?' na':''); }
   const row = document.getElementById(`erow-${rank}`);
   if(row){ row.className = `edit-row${!vacant?' has-data':''} ${rank===1?'rank1':rank===2?'rank2':rank===3?'rank3':''}`; }
   // Push
@@ -735,7 +735,7 @@ async function clearEntry(rank) {
   updateStats();
 }
 
-// ── IMAGE HANDLING ────────────────────────────────────
+// -- IMAGE HANDLING ------------------------------------
 function handleImgFile(rank, input) {
   if (!input.files[0]) return;
   const file = input.files[0];
@@ -750,7 +750,7 @@ function handleImgFile(rank, input) {
     if(prev) prev.innerHTML = `<img src="${src}" alt="">`;
     const av = document.getElementById(`eav-${rank}`);
     if(av) av.innerHTML = `<img src="${src}" alt="">`;
-    toast('Image loaded — save to push', 'info');
+    toast('Image loaded  -  save to push', 'info');
   };
   reader.readAsDataURL(file);
 }
@@ -761,7 +761,7 @@ function previewImgUrl(rank) {
   const p = players.find(x=>x.rank===rank);
   if(p) p.img = url;
   const prev = document.getElementById(`eprev-img-${rank}`);
-  if(prev) prev.innerHTML = `<img src="${url}" alt="" onerror="this.parentElement.innerHTML='❌'">`;
+  if(prev) prev.innerHTML = `<img src="${url}" alt="" onerror="this.parentElement.innerHTML='[x]'">`;
   const av = document.getElementById(`eav-${rank}`);
   if(av) av.innerHTML = `<img src="${url}" alt="">`;
 }
@@ -772,9 +772,9 @@ function clearImg(rank) {
   const imgEl = document.getElementById(`ef-img-${rank}`);
   if(imgEl) imgEl.value='';
   const prev = document.getElementById(`eprev-img-${rank}`);
-  if(prev) prev.innerHTML = '📷';
+  if(prev) prev.innerHTML = '[img]';
   const av = document.getElementById(`eav-${rank}`);
-  if(av) { const pp = players.find(x=>x.rank===rank); av.innerHTML = (!pp||pp.name==='N/A')?'—':pp.name.charAt(0).toUpperCase(); }
+  if(av) { const pp = players.find(x=>x.rank===rank); av.innerHTML = (!pp||pp.name==='N/A')?' - ':pp.name.charAt(0).toUpperCase(); }
 }
 
 function setupDragDrop(rank) {
@@ -785,7 +785,7 @@ function setupDragDrop(rank) {
   dz.addEventListener('drop', e=>{ e.preventDefault(); dz.classList.remove('drag'); const f=e.dataTransfer.files[0]; if(f){ const fakeInput={files:[f]}; handleImgFile(rank,fakeInput); } });
 }
 
-// ── FILTER & SEARCH ───────────────────────────────────
+// -- FILTER & SEARCH -----------------------------------
 let filterActive = 'all';
 function setFilter(mode, btn) {
   filterMode = mode;
@@ -795,7 +795,7 @@ function setFilter(mode, btn) {
 }
 function filterRows() { renderRows(); }
 
-// ── STATS ─────────────────────────────────────────────
+// -- STATS ---------------------------------------------
 function updateStats() {
   const filled = players.filter(p=>p.name&&p.name!=='N/A').length;
   const links  = players.reduce((a,p)=>a+[p.roblox,p.discord,p.clanDiscord].filter(Boolean).length,0);
@@ -806,7 +806,7 @@ function updateStats() {
   document.getElementById('statPhotos').textContent = photos;
 }
 
-// ── STATUS ────────────────────────────────────────────
+// -- STATUS --------------------------------------------
 function setStatus(type, label, dotClass) {
   const dot = document.getElementById('statusDot');
   const lbl = document.getElementById('statusLabel');
@@ -820,7 +820,7 @@ function setCfgStatus(type, msg) {
   if(txt) txt.textContent = msg;
 }
 
-// ── SAVING OVERLAY ────────────────────────────────────
+// -- SAVING OVERLAY ------------------------------------
 function showSavingOverlay(msg) {
   document.getElementById('savingOverlay').classList.add('show');
   document.getElementById('saveOverlayText').textContent = msg;
@@ -829,7 +829,7 @@ function hideSavingOverlay() {
   document.getElementById('savingOverlay').classList.remove('show');
 }
 
-// ── TOAST ─────────────────────────────────────────────
+// -- TOAST ---------------------------------------------
 function toast(msg, type='ok') {
   const t = document.getElementById('toast');
   t.textContent = msg;
@@ -838,7 +838,7 @@ function toast(msg, type='ok') {
   t._t = setTimeout(()=>{ t.className='toast'; }, 4000);
 }
 
-// ── UTILS ─────────────────────────────────────────────
+// -- UTILS ---------------------------------------------
 function escH(s=''){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 function escA(s=''){return String(s).replace(/"/g,'&quot;');}
 </script>
