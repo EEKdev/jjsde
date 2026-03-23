@@ -528,7 +528,7 @@ async function saveAll() {
     const content = btoa(unescape(encodeURIComponent(JSON.stringify(payload, null, 2))));
 
     const body = {
-      message: `Update leaderboard — ${new Date().toLocaleString('de-DE')}`,
+      message: 'Update leaderboard ' + new Date().toISOString().slice(0,19).replace('T',' '),
       content,
       branch: 'main'
     };
