@@ -496,10 +496,25 @@ async function reloadData() {
 async function saveAll() {
   const cfg = getConfig();
   if (!cfg.owner || !cfg.token) { toast('Configure GitHub first', 'err'); return; }
-  showSavingOverlay('Pushing to GitHub…');
+  showSavingOverlay('Checking file state…');
   try {
-    // Collect latest values from all open inputs
     collectAllInputs();
+
+    // Always fetch the latest SHA before writing.
+    // This fixes the 'sha was not supplied' error when data.json already
+    // exists on GitHub but origSHA was never loaded in this session.
+    try {
+      const existing = await ghFetch('contents/data.json');
+      origSHA = existing.sha;
+    } catch(shaErr) {
+      // 404 = file doesn't exist yet, create fresh (no sha needed)
+      if (!shaErr.message.includes('404') && !shaErr.message.includes('Not Found')) {
+        throw shaErr;
+      }
+      origSHA = '';
+    }
+
+    showSavingOverlay('Pushing to GitHub…');
 
     const payload = {
       meta: {
@@ -513,7 +528,7 @@ async function saveAll() {
     const content = btoa(unescape(encodeURIComponent(JSON.stringify(payload, null, 2))));
 
     const body = {
-      message: `Update leaderboard data — ${new Date().toLocaleString('de-DE')}`,
+      message: `Update leaderboard — ${new Date().toLocaleString('de-DE')}`,
       content,
       branch: 'main'
     };
@@ -530,11 +545,7 @@ async function saveAll() {
   } catch(e) {
     hideSavingOverlay();
     console.error(e);
-    if (e.message.includes('409') || e.message.includes('conflict')) {
-      toast('Conflict — reload from GitHub first', 'err');
-    } else {
-      toast('Save failed: ' + e.message, 'err');
-    }
+    toast('Save failed: ' + e.message, 'err');
     setStatus('err','ERROR','dot-err');
   }
 }
