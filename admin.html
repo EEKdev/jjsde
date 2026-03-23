@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>JJS DE Admin Panel</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Outfit:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --black:#000;--red:#CC0000;--red-bright:#FF1A1A;--gold:#FFCC00;
+  --bg:#07070e;--bg2:#0d0d18;--surface:#111120;--surface2:#181828;--surface3:#1f1f33;
+  --border:rgba(255,255,255,0.055);--border2:rgba(255,255,255,0.10);--border-red:rgba(204,0,0,0.3);
+  --text:#e8e8f0;--text2:#b0b0c8;--muted:#6a6a88;
+  --discord:#5865F2;--roblox:#E53935;
+  --success:#00D68F;--danger:#FF4560;--warn:#FFAA00;
+  --radius:10px;--radius-lg:16px;
+  --font-display:'Rajdhani',sans-serif;
+  --font-body:'Outfit',sans-serif;
+  --font-mono:'JetBrains Mono',monospace;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:16px}
+body{background:var(--bg);color:var(--text);font-family:var(--font-body);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+button{cursor:pointer;font-family:inherit}
+input,textarea,select{font-family:inherit}
+
+/* BG */
+.bg-stripe{position:fixed;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#000 33.33%,#CC0000 33.33% 66.66%,#FFCC00 66.66%);z-index:500}
+.bg-fx{position:fixed;inset:0;pointer-events:none;z-index:0;background:radial-gradient(ellipse 80% 50% at 10% -5%,rgba(204,0,0,0.10) 0%,transparent 55%)}
+.bg-grid{position:fixed;inset:0;pointer-events:none;z-index:0;background-image:linear-gradient(rgba(255,255,255,.014) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.014) 1px,transparent 1px);background-size:52px 52px}
+
+/* ════ LOGIN WALL ════ */
+#loginWall{position:fixed;inset:0;z-index:600;background:var(--bg);display:flex;align-items:center;justify-content:center;padding:24px}
+.login-box{background:var(--surface);border:1px solid var(--border2);border-radius:var(--radius-lg);padding:40px 36px;width:100%;max-width:420px;box-shadow:0 24px 72px rgba(0,0,0,.7);animation:popIn .3s cubic-bezier(.34,1.56,.64,1)}
+@keyframes popIn{from{opacity:0;transform:scale(.92) translateY(16px)}to{opacity:1;transform:scale(1) translateY(0)}}
+.login-flag{display:flex;flex-direction:row;justify-content:center;gap:0;margin-bottom:20px}
+.login-flag s{display:block;width:30px;height:22px;font-size:0}
+.lf1{background:#000;border-radius:4px 0 0 4px}.lf2{background:#CC0000}.lf3{background:#FFCC00;border-radius:0 4px 4px 0}
+.login-title{font-family:var(--font-display);font-weight:700;font-size:28px;letter-spacing:3px;text-transform:uppercase;text-align:center;margin-bottom:4px}
+.login-sub{font-family:var(--font-mono);font-size:9.5px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);text-align:center;margin-bottom:28px}
+.login-err{background:rgba(255,69,96,.1);border:1px solid rgba(255,69,96,.2);color:var(--danger);border-radius:8px;padding:10px 14px;font-size:12.5px;margin-bottom:16px;display:none;text-align:center}
+.login-err.show{display:block}
+
+/* FORMS */
+.form-group{margin-bottom:16px}
+.form-label{display:block;font-family:var(--font-mono);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--text2);margin-bottom:7px}
+.form-input{width:100%;background:var(--surface2);border:1px solid var(--border2);border-radius:8px;padding:11px 13px;color:var(--text);font-size:14px;outline:none;transition:border-color .2s,box-shadow .2s;-webkit-appearance:none}
+.form-input:focus{border-color:var(--red);box-shadow:0 0 0 3px rgba(204,0,0,.12)}
+textarea.form-input{resize:vertical;min-height:70px}
+
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:11px 22px;border:none;border-radius:9px;font-weight:600;font-size:13.5px;transition:all .2s;-webkit-tap-highlight-color:transparent}
+.btn-red{background:var(--red);color:#fff;box-shadow:0 4px 18px rgba(204,0,0,.35)}
+.btn-red:hover{background:var(--red-bright);transform:translateY(-1px);box-shadow:0 7px 24px rgba(204,0,0,.45)}
+.btn-full{width:100%}
+.btn-sm{padding:7px 14px;font-size:12px;border-radius:8px}
+.btn-ghost{background:var(--surface3);color:var(--text2);border:1px solid var(--border2)}
+.btn-ghost:hover{border-color:var(--border2);background:var(--surface2)}
+.btn-save{background:rgba(0,214,143,.12);color:var(--success);border:1px solid rgba(0,214,143,.2)}
+.btn-save:hover{background:rgba(0,214,143,.22)}
+.btn-clear{background:rgba(255,69,96,.1);color:var(--danger);border:1px solid rgba(255,69,96,.2)}
+.btn-clear:hover{background:rgba(255,69,96,.2)}
+.btn-logout{background:transparent;color:var(--muted);border:1px solid var(--border2);padding:7px 14px;font-size:11px;border-radius:7px}
+.btn-logout:hover{color:var(--danger);border-color:var(--danger)}
+
+/* ════ ADMIN SHELL ════ */
+#adminShell{display:none;position:relative;z-index:1;min-height:100vh}
+#adminShell.visible{display:block}
+
+/* TOPBAR */
+.topbar{position:sticky;top:0;z-index:200;background:rgba(7,7,14,.92);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--border2);padding:0 24px}
+.topbar-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:58px;gap:12px}
+.topbar-brand{font-family:var(--font-display);font-weight:700;font-size:20px;letter-spacing:3px;text-transform:uppercase;color:#fff;display:flex;align-items:center;gap:8px}
+.topbar-brand .badge{font-size:10px;background:var(--border-red);border:1px solid var(--red);color:var(--red-bright);padding:2px 8px;border-radius:4px;letter-spacing:2px;font-family:var(--font-mono)}
+.topbar-right{display:flex;align-items:center;gap:10px;flex-shrink:0}
+.status-dot{width:7px;height:7px;border-radius:50%;background:var(--success);flex-shrink:0}
+.status-label{font-family:var(--font-mono);font-size:9px;letter-spacing:1.5px;color:var(--success)}
+.back-link{font-family:var(--font-mono);font-size:9.5px;letter-spacing:1.5px;color:var(--muted);text-decoration:none;transition:color .2s}
+.back-link:hover{color:var(--text)}
+
+/* MAIN WRAP */
+.admin-wrap{max-width:1100px;margin:0 auto;padding:28px 24px 80px}
+
+/* SETUP BANNER */
+.setup-banner{background:rgba(255,170,0,.08);border:1px solid rgba(255,170,0,.25);border-radius:var(--radius);padding:16px 20px;margin-bottom:24px;display:flex;gap:14px;align-items:flex-start}
+.setup-banner .ico{font-size:20px;flex-shrink:0;margin-top:2px}
+.setup-banner h4{font-family:var(--font-mono);font-size:11px;letter-spacing:1px;color:var(--warn);margin-bottom:6px;text-transform:uppercase}
+.setup-banner p{font-size:12.5px;color:var(--text2);line-height:1.6}
+.setup-banner code{background:var(--surface3);padding:1px 5px;border-radius:4px;font-size:11px;color:var(--gold)}
+.setup-banner .close-banner{background:none;border:none;color:var(--muted);font-size:18px;margin-left:auto;line-height:1;padding:2px;flex-shrink:0}
+.setup-banner .close-banner:hover{color:var(--danger)}
+
+/* GITHUB CONFIG PANEL */
+.config-panel{background:var(--surface);border:1px solid var(--border2);border-radius:var(--radius-lg);padding:24px;margin-bottom:24px}
+.config-panel h3{font-family:var(--font-display);font-size:18px;letter-spacing:2px;text-transform:uppercase;margin-bottom:4px}
+.config-panel .sub{font-size:12px;color:var(--muted);margin-bottom:20px;font-family:var(--font-mono)}
+.config-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.config-status{display:flex;align-items:center;gap:8px;margin-top:14px;font-family:var(--font-mono);font-size:11px;color:var(--muted)}
+.config-status .dot{width:7px;height:7px;border-radius:50%}
+.dot-ok{background:var(--success)}.dot-err{background:var(--danger)}.dot-idle{background:var(--muted)}
+.token-note{font-size:11px;color:var(--muted);margin-top:8px;line-height:1.5}
+.token-note a{color:var(--gold);text-decoration:underline}
+
+/* STATS BAR */
+.stats-bar{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:24px}
+.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px 18px;text-align:center}
+.stat-num{font-family:var(--font-display);font-size:32px;font-weight:700;line-height:1}
+.stat-label{font-family:var(--font-mono);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-top:4px}
+.stat-card.red .stat-num{color:var(--red-bright)}
+.stat-card.gold .stat-num{color:var(--gold)}
+.stat-card.blue .stat-num{color:var(--discord)}
+.stat-card.green .stat-num{color:var(--success)}
+
+/* PLAYERS PANEL */
+.players-panel{background:var(--surface);border:1px solid var(--border2);border-radius:var(--radius-lg);overflow:hidden}
+.panel-header{display:flex;align-items:center;justify-content:space-between;padding:18px 24px;border-bottom:1px solid var(--border);flex-wrap:wrap;gap:10px}
+.panel-title{font-family:var(--font-display);font-size:20px;font-weight:700;letter-spacing:2px;text-transform:uppercase}
+.panel-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.search-box{background:var(--surface2);border:1px solid var(--border2);border-radius:8px;padding:8px 12px;color:var(--text);font-size:13px;outline:none;width:200px;transition:border-color .2s}
+.search-box:focus{border-color:var(--red)}
+.filter-tabs{display:flex;gap:4px}
+.filter-tab{background:var(--surface2);border:1px solid var(--border);color:var(--muted);font-family:var(--font-mono);font-size:9px;letter-spacing:1.5px;text-transform:uppercase;padding:6px 12px;border-radius:6px;transition:all .2s}
+.filter-tab.active,.filter-tab:hover{border-color:var(--red);color:var(--red)}
+
+/* EDIT ROWS */
+.edit-rows{padding:12px}
+.edit-row{background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:7px;overflow:hidden;transition:border-color .2s}
+.edit-row.open{border-color:var(--border2)}
+.edit-row.has-data{border-left:3px solid var(--red)}
+.edit-row.has-data.rank1{border-left-color:var(--gold)}
+.edit-row.has-data.rank2{border-left-color:#C0C0C0}
+.edit-row.has-data.rank3{border-left-color:#CD7F32}
+
+.row-header{display:grid;grid-template-columns:44px 48px 1fr auto;align-items:center;gap:12px;padding:12px 16px;cursor:pointer;user-select:none;-webkit-tap-highlight-color:transparent}
+.row-header:hover{background:rgba(255,255,255,.02)}
+.row-rank{font-family:var(--font-display);font-weight:700;font-size:20px;color:var(--muted);line-height:1}
+.row-av{width:42px;height:42px;border-radius:8px;background:var(--surface3);border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-weight:700;font-size:16px;color:var(--muted);overflow:hidden;flex-shrink:0}
+.row-av img{width:100%;height:100%;object-fit:cover;border-radius:7px}
+.row-info{min-width:0}
+.row-name{font-weight:600;font-size:14px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.row-name.na{color:var(--muted);font-style:italic}
+.row-meta{font-family:var(--font-mono);font-size:9px;color:var(--muted);margin-top:2px;letter-spacing:1px}
+.row-chevron{color:var(--muted);font-size:12px;transition:transform .25s;flex-shrink:0}
+.edit-row.open .row-chevron{transform:rotate(180deg)}
+
+/* EDIT BODY */
+.row-body{display:none;border-top:1px solid var(--border);padding:20px}
+.edit-row.open .row-body{display:block}
+.body-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+.body-full{margin-bottom:14px}
+
+/* IMG UPLOAD */
+.img-uploader{display:flex;gap:16px;align-items:flex-start;margin-bottom:14px}
+.img-preview{width:80px;height:80px;border-radius:10px;background:var(--surface3);border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0;overflow:hidden;position:relative}
+.img-preview img{width:100%;height:100%;object-fit:cover;border-radius:9px}
+.img-upload-right{flex:1}
+.img-dropzone{border:2px dashed var(--border2);border-radius:9px;padding:14px;text-align:center;cursor:pointer;transition:all .2s;position:relative}
+.img-dropzone:hover,.img-dropzone.drag{border-color:var(--red);background:rgba(204,0,0,.04)}
+.img-dropzone input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.img-dropzone .dz-icon{font-size:20px;opacity:.4;margin-bottom:5px}
+.img-dropzone p{font-size:11px;color:var(--muted)}
+.img-dropzone p strong{color:var(--text2)}
+.img-url-row{display:flex;gap:8px;margin-top:10px}
+.img-url-row input{flex:1}
+
+/* ROW FOOTER */
+.row-footer{display:flex;justify-content:space-between;align-items:center;padding-top:12px;border-top:1px solid var(--border);margin-top:4px;flex-wrap:wrap;gap:8px}
+.row-save-status{font-family:var(--font-mono);font-size:10px;color:var(--muted);letter-spacing:1px}
+.row-btns{display:flex;gap:8px}
+
+/* SAVE ALL BUTTON */
+.save-all-wrap{padding:16px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+.save-hint{font-family:var(--font-mono);font-size:10px;color:var(--muted);letter-spacing:1px}
+
+/* TOAST */
+.toast{position:fixed;bottom:20px;right:20px;left:20px;max-width:400px;margin:0 auto;background:var(--surface3);border:1px solid var(--border2);font-family:var(--font-mono);font-size:11px;letter-spacing:.5px;padding:12px 20px;border-radius:9px;z-index:800;transform:translateY(60px);opacity:0;transition:all .3s cubic-bezier(.34,1.56,.64,1);pointer-events:none;display:flex;align-items:center;gap:10px}
+.toast.show{transform:translateY(0);opacity:1}
+.toast.ok{border-color:rgba(0,214,143,.3);color:var(--success)}
+.toast.err{border-color:rgba(255,69,96,.3);color:var(--danger)}
+.toast.info{border-color:rgba(255,170,0,.3);color:var(--warn)}
+
+/* SAVING OVERLAY */
+.saving-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(4px);z-index:700;display:none;align-items:center;justify-content:center;flex-direction:column;gap:16px}
+.saving-overlay.show{display:flex}
+.save-spinner{width:40px;height:40px;border-radius:50%;border:3px solid var(--border2);border-top-color:var(--red);animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.save-text{font-family:var(--font-mono);font-size:11px;letter-spacing:2px;color:var(--text2);text-transform:uppercase}
+
+/* RESPONSIVE */
+@media(max-width:780px){
+  .stats-bar{grid-template-columns:repeat(2,1fr)}
+  .config-grid{grid-template-columns:1fr}
+  .body-grid{grid-template-columns:1fr}
+  .admin-wrap{padding:20px 16px 80px}
+  .topbar{padding:0 16px}
+  .search-box{width:140px}
+  .row-header{grid-template-columns:36px 40px 1fr auto;gap:9px;padding:10px 13px}
+}
+@media(max-width:480px){
+  .filter-tabs{display:none}
+  .topbar-brand .badge{display:none}
+  .stats-bar{grid-template-columns:1fr 1fr}
+  .img-uploader{flex-direction:column}
+  .img-preview{width:100%;height:120px}
+}
+</style>
+</head>
+<body>
+<div class="bg-stripe"></div>
+<div class="bg-fx"></div>
+<div class="bg-grid"></div>
+
+<!-- ════ LOGIN WALL ════ -->
+<div id="loginWall">
+  <div class="login-box">
+    <div class="login-flag"><s class="lf1"></s><s class="lf2"></s><s class="lf3"></s></div>
+    <div class="login-title">Admin Panel</div>
+    <div class="login-sub">JJS DE Leaderboard · Season 2026</div>
+    <div class="login-err" id="loginErr">Invalid password. Access denied.</div>
+    <div class="form-group">
+      <label class="form-label">Admin Password</label>
+      <input class="form-input" type="password" id="loginPass" placeholder="Enter admin password" autocomplete="current-password">
+    </div>
+    <button class="btn btn-red btn-full" onclick="doLogin()">
+      <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M8 1a2 2 0 0 1 2 2v2H6V3a2 2 0 0 1 2-2zm3 4V3A3 3 0 0 0 5 3v2H3.5A1.5 1.5 0 0 0 2 6.5v8A1.5 1.5 0 0 0 3.5 16h9a1.5 1.5 0 0 0 1.5-1.5v-8A1.5 1.5 0 0 0 12.5 5H11z"/></svg>
+      Sign In
+    </button>
+    <div style="text-align:center;margin-top:18px">
+      <a href="index.html" style="font-family:var(--font-mono);font-size:9px;letter-spacing:2px;color:var(--muted);text-decoration:none">← Back to Leaderboard</a>
+    </div>
+  </div>
+</div>
+
+<!-- ════ ADMIN SHELL ════ -->
+<div id="adminShell">
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div class="topbar-inner">
+      <div class="topbar-brand">
+        JJS DE Admin
+        <span class="badge">S2026</span>
+      </div>
+      <div class="topbar-right">
+        <div class="status-dot" id="statusDot"></div>
+        <span class="status-label" id="statusLabel">READY</span>
+        <a href="index.html" class="back-link">← Leaderboard</a>
+        <button class="btn-logout" onclick="doLogout()">Log out</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="admin-wrap">
+
+    <!-- SETUP BANNER -->
+    <div class="setup-banner" id="setupBanner">
+      <div class="ico">⚙️</div>
+      <div>
+        <h4>First-time Setup Required</h4>
+        <p>
+          To save data globally, enter your <strong>GitHub Personal Access Token</strong> and repo details below.
+          The token needs <code>repo</code> permission (or <code>contents:write</code> for fine-grained).
+          Your token is stored in <strong>localStorage only</strong> — never transmitted anywhere except to the GitHub API.
+          <br><br>
+          Create token at: <strong>GitHub → Settings → Developer Settings → Personal Access Tokens</strong>
+        </p>
+      </div>
+      <button class="close-banner" onclick="document.getElementById('setupBanner').style.display='none'">✕</button>
+    </div>
+
+    <!-- GITHUB CONFIG PANEL -->
+    <div class="config-panel" id="configPanel">
+      <h3>GitHub Configuration</h3>
+      <p class="sub">Required to read and write data.json in your repository</p>
+      <div class="config-grid">
+        <div class="form-group" style="margin:0">
+          <label class="form-label">GitHub Username</label>
+          <input class="form-input" type="text" id="cfgOwner" placeholder="your-username" autocomplete="off" spellcheck="false">
+        </div>
+        <div class="form-group" style="margin:0">
+          <label class="form-label">Repository Name</label>
+          <input class="form-input" type="text" id="cfgRepo" placeholder="jjs-leaderboard" autocomplete="off" spellcheck="false">
+        </div>
+        <div class="form-group" style="margin:0;grid-column:1/-1">
+          <label class="form-label">Personal Access Token (stored locally, never shared)</label>
+          <input class="form-input" type="password" id="cfgToken" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" autocomplete="off" spellcheck="false">
+          <p class="token-note">
+            Needs <code style="color:var(--gold);background:var(--surface3);padding:1px 5px;border-radius:3px;font-size:10px">repo</code> scope.
+            <a href="https://github.com/settings/tokens/new" target="_blank">Create token here ↗</a>
+          </p>
+        </div>
+      </div>
+      <div style="display:flex;gap:10px;align-items:center;margin-top:16px;flex-wrap:wrap">
+        <button class="btn btn-red btn-sm" onclick="saveConfig()">Save Configuration</button>
+        <button class="btn btn-ghost btn-sm" onclick="testConnection()">Test Connection</button>
+        <div class="config-status">
+          <span class="dot dot-idle" id="cfgDot"></span>
+          <span id="cfgStatus">Not configured</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- STATS BAR -->
+    <div class="stats-bar">
+      <div class="stat-card red"><div class="stat-num" id="statFilled">0</div><div class="stat-label">Players Set</div></div>
+      <div class="stat-card gold"><div class="stat-num" id="statVacant">30</div><div class="stat-label">Vacant Slots</div></div>
+      <div class="stat-card blue"><div class="stat-num" id="statLinks">0</div><div class="stat-label">Total Links</div></div>
+      <div class="stat-card green"><div class="stat-num" id="statPhotos">0</div><div class="stat-label">Photos Set</div></div>
+    </div>
+
+    <!-- PLAYERS PANEL -->
+    <div class="players-panel">
+      <div class="panel-header">
+        <div class="panel-title">Players (1–30)</div>
+        <div class="panel-actions">
+          <input class="search-box" type="text" id="searchBox" placeholder="Search player…" oninput="filterRows()" autocomplete="off">
+          <div class="filter-tabs">
+            <button class="filter-tab active" onclick="setFilter('all',this)">All</button>
+            <button class="filter-tab" onclick="setFilter('filled',this)">Filled</button>
+            <button class="filter-tab" onclick="setFilter('vacant',this)">Vacant</button>
+            <button class="filter-tab" onclick="setFilter('10',this)">1–10</button>
+            <button class="filter-tab" onclick="setFilter('20',this)">11–20</button>
+            <button class="filter-tab" onclick="setFilter('30',this)">21–30</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="edit-rows" id="editRows">
+        <div style="text-align:center;padding:40px;font-family:var(--font-mono);font-size:11px;color:var(--muted);letter-spacing:2px">LOADING PLAYERS…</div>
+      </div>
+
+      <div class="save-all-wrap">
+        <div class="save-hint" id="saveHint">Load data to begin editing</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button class="btn btn-ghost btn-sm" onclick="reloadData()">↺ Reload from GitHub</button>
+          <button class="btn btn-red" onclick="saveAll()" id="saveAllBtn" disabled>
+            <svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor"><path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/><path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/></svg>
+            Save All to GitHub
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /admin-wrap -->
+</div><!-- /adminShell -->
+
+<!-- SAVING OVERLAY -->
+<div class="saving-overlay" id="savingOverlay">
+  <div class="save-spinner"></div>
+  <div class="save-text" id="saveOverlayText">Saving to GitHub…</div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ══════════════════════════════════════════════════════
+//  PASSWORD: SHA-256 of "JJSde2026" — never store plain text
+// ══════════════════════════════════════════════════════
+const PASS_HASH = 'e09cd6e1e781c05bdfc0bb34ad9cc39f627cb149fd6c15e278a8e9a8abeda85c';
+
+let players = [];       // working copy
+let origSHA = '';       // current SHA of data.json on GitHub (required for updates)
+let filterMode = 'all';
+let isLoggedIn = false;
+
+// ── CONFIG (stored in localStorage) ──────────────────
+function getConfig() {
+  return {
+    owner: localStorage.getItem('jjs_owner') || '',
+    repo:  localStorage.getItem('jjs_repo')  || 'jjs-leaderboard',
+    token: localStorage.getItem('jjs_token') || ''
+  };
+}
+function saveConfig() {
+  const owner = document.getElementById('cfgOwner').value.trim();
+  const repo  = document.getElementById('cfgRepo').value.trim();
+  const token = document.getElementById('cfgToken').value.trim();
+  if (!owner || !token) { toast('Enter username and token', 'err'); return; }
+  localStorage.setItem('jjs_owner', owner);
+  localStorage.setItem('jjs_repo', repo || 'jjs-leaderboard');
+  localStorage.setItem('jjs_token', token);
+  toast('Configuration saved locally', 'ok');
+  setCfgStatus('idle', 'Saved — click Test to verify');
+}
+
+// ── LOGIN ─────────────────────────────────────────────
+async function sha256(str) {
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+  return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
+}
+
+document.getElementById('loginPass').addEventListener('keydown', e => { if(e.key==='Enter') doLogin(); });
+
+async function doLogin() {
+  const pass = document.getElementById('loginPass').value;
+  const hash = await sha256(pass);
+  if (hash === PASS_HASH) {
+    isLoggedIn = true;
+    document.getElementById('loginWall').style.display = 'none';
+    document.getElementById('adminShell').classList.add('visible');
+    initAdmin();
+  } else {
+    document.getElementById('loginErr').classList.add('show');
+    document.getElementById('loginPass').value = '';
+    setTimeout(() => document.getElementById('loginErr').classList.remove('show'), 3000);
+  }
+}
+
+function doLogout() {
+  isLoggedIn = false;
+  location.reload();
+}
+
+// ── INIT ADMIN ────────────────────────────────────────
+function initAdmin() {
+  const cfg = getConfig();
+  if (cfg.owner) {
+    document.getElementById('cfgOwner').value = cfg.owner;
+    document.getElementById('cfgRepo').value  = cfg.repo;
+    document.getElementById('cfgToken').value = cfg.token ? '••••••••••••••••' : '';
+    document.getElementById('setupBanner').style.display = 'none';
+  }
+  loadData();
+}
+
+// ── GITHUB API ────────────────────────────────────────
+async function ghFetch(path, method='GET', body=null) {
+  const cfg = getConfig();
+  if (!cfg.token) throw new Error('No GitHub token configured');
+  const opts = {
+    method,
+    headers: {
+      'Authorization': `Bearer ${cfg.token}`,
+      'Accept': 'application/vnd.github+json',
+      'X-GitHub-Api-Version': '2022-11-28',
+      'Content-Type': 'application/json'
+    }
+  };
+  if (body) opts.body = JSON.stringify(body);
+  const res = await fetch(`https://api.github.com/repos/${cfg.owner}/${cfg.repo}/${path}`, opts);
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.message || `GitHub API error ${res.status}`);
+  return data;
+}
+
+async function loadData() {
+  const cfg = getConfig();
+  if (!cfg.owner || !cfg.token) {
+    // Load empty template
+    players = Array.from({length:30},(_,i)=>({rank:i+1,name:'N/A',desc:'',roblox:'',discord:'',clanDiscord:'',img:''}));
+    renderRows();
+    updateStats();
+    document.getElementById('saveHint').textContent = 'Configure GitHub above then reload';
+    return;
+  }
+
+  setStatus('loading','LOADING…','dot-idle');
+  try {
+    const file = await ghFetch(`contents/data.json`);
+    origSHA = file.sha;
+    const json = JSON.parse(atob(file.content.replace(/\n/g,'')));
+    players = json.players || [];
+    // Ensure all 30 present
+    for (let r = 1; r <= 30; r++) {
+      if (!players.find(p=>p.rank===r)) {
+        players.push({rank:r,name:'N/A',desc:'',roblox:'',discord:'',clanDiscord:'',img:''});
+      }
+    }
+    players.sort((a,b)=>a.rank-b.rank);
+    renderRows();
+    updateStats();
+    document.getElementById('saveAllBtn').disabled = false;
+    document.getElementById('saveHint').textContent = `Loaded ${players.length} entries · SHA: ${origSHA.slice(0,8)}`;
+    setStatus('ok','CONNECTED','dot-ok');
+    toast('Data loaded from GitHub', 'ok');
+  } catch(e) {
+    console.error(e);
+    setStatus('err','ERROR','dot-err');
+    toast('Failed to load: ' + e.message, 'err');
+    document.getElementById('saveHint').textContent = 'Error loading — check config';
+    // Still render template
+    if (!players.length) {
+      players = Array.from({length:30},(_,i)=>({rank:i+1,name:'N/A',desc:'',roblox:'',discord:'',clanDiscord:'',img:''}));
+      renderRows();
+    }
+  }
+}
+
+async function reloadData() {
+  origSHA = '';
+  await loadData();
+}
+
+async function saveAll() {
+  const cfg = getConfig();
+  if (!cfg.owner || !cfg.token) { toast('Configure GitHub first', 'err'); return; }
+  showSavingOverlay('Pushing to GitHub…');
+  try {
+    // Collect latest values from all open inputs
+    collectAllInputs();
+
+    const payload = {
+      meta: {
+        season: '2026',
+        lastUpdated: new Date().toISOString(),
+        updatedBy: cfg.owner
+      },
+      players: players
+    };
+
+    const content = btoa(unescape(encodeURIComponent(JSON.stringify(payload, null, 2))));
+
+    const body = {
+      message: `Update leaderboard data — ${new Date().toLocaleString('de-DE')}`,
+      content,
+      branch: 'main'
+    };
+    if (origSHA) body.sha = origSHA;
+
+    const res = await ghFetch('contents/data.json', 'PUT', body);
+    origSHA = res.content.sha;
+
+    hideSavingOverlay();
+    toast('✓ Saved to GitHub — live globally!', 'ok');
+    document.getElementById('saveHint').textContent = `Saved at ${new Date().toLocaleTimeString('de-DE')} · SHA: ${origSHA.slice(0,8)}`;
+    setStatus('ok','SAVED','dot-ok');
+    updateStats();
+  } catch(e) {
+    hideSavingOverlay();
+    console.error(e);
+    if (e.message.includes('409') || e.message.includes('conflict')) {
+      toast('Conflict — reload from GitHub first', 'err');
+    } else {
+      toast('Save failed: ' + e.message, 'err');
+    }
+    setStatus('err','ERROR','dot-err');
+  }
+}
+
+async function testConnection() {
+  const cfg = getConfig();
+  if (!cfg.owner || !cfg.token) { toast('Fill in username and token first', 'err'); return; }
+  // Re-read actual token from input if it was changed
+  const tokenInput = document.getElementById('cfgToken').value;
+  if (tokenInput && !tokenInput.startsWith('•')) {
+    localStorage.setItem('jjs_token', tokenInput);
+  }
+  setCfgStatus('idle','Testing…');
+  try {
+    await ghFetch('contents/data.json');
+    setCfgStatus('ok','Connected ✓');
+    toast('GitHub connection OK!', 'ok');
+  } catch(e) {
+    setCfgStatus('err','Failed: ' + e.message);
+    toast('Connection failed: ' + e.message, 'err');
+  }
+}
+
+// ── RENDER ROWS ───────────────────────────────────────
+function renderRows() {
+  const container = document.getElementById('editRows');
+  container.innerHTML = '';
+  const search = (document.getElementById('searchBox')?.value||'').toLowerCase();
+
+  players.forEach(p => {
+    const vacant = !p.name || p.name === 'N/A';
+
+    // filter
+    if (filterMode === 'filled' && vacant) return;
+    if (filterMode === 'vacant' && !vacant) return;
+    if (filterMode === '10' && p.rank > 10) return;
+    if (filterMode === '20' && (p.rank < 11 || p.rank > 20)) return;
+    if (filterMode === '30' && p.rank < 21) return;
+    if (search && !p.name.toLowerCase().includes(search) && !String(p.rank).includes(search)) return;
+
+    const hasData = !vacant;
+    const rankClass = p.rank===1?'rank1':p.rank===2?'rank2':p.rank===3?'rank3':'';
+    const avContent = p.img ? `<img src="${p.img}" alt="">` : (vacant ? '—' : p.name.charAt(0).toUpperCase());
+    const linkCount = [p.roblox,p.discord,p.clanDiscord].filter(Boolean).length;
+
+    const row = document.createElement('div');
+    row.className = `edit-row${hasData?' has-data':''} ${rankClass}`;
+    row.id = `erow-${p.rank}`;
+    row.innerHTML = `
+      <div class="row-header" onclick="toggleRow(${p.rank})">
+        <div class="row-rank" style="color:${p.rank===1?'var(--gold)':p.rank===2?'#C0C0C0':p.rank===3?'#CD7F32':'var(--muted)'}">#${p.rank}</div>
+        <div class="row-av" id="eav-${p.rank}">${avContent}</div>
+        <div class="row-info">
+          <div class="row-name${vacant?' na':''}" id="eprev-${p.rank}">${vacant?'N/A — Vacant':escH(p.name)}</div>
+          <div class="row-meta">${hasData ? `${p.desc||'No description'} · ${linkCount} link${linkCount!==1?'s':''}` : 'Vacant slot'}</div>
+        </div>
+        <div class="row-chevron">▼</div>
+      </div>
+      <div class="row-body">
+        <div class="img-uploader">
+          <div class="img-preview" id="eprev-img-${p.rank}">${p.img?`<img src="${p.img}" alt="">`:'📷'}</div>
+          <div class="img-upload-right">
+            <div class="img-dropzone" id="dz-${p.rank}">
+              <input type="file" accept="image/*" onchange="handleImgFile(${p.rank},this)" title="Upload image">
+              <div class="dz-icon">📁</div>
+              <p><strong>Click to upload</strong> or drag & drop<br><span style="font-size:9px;opacity:.6">JPG, PNG, GIF, WebP — max 500KB</span></p>
+            </div>
+            <div class="img-url-row">
+              <input class="form-input" type="text" id="ef-img-${p.rank}" value="${escA(p.img)}" placeholder="Or paste image URL here" oninput="previewImgUrl(${p.rank})">
+              <button class="btn btn-ghost btn-sm" onclick="clearImg(${p.rank})">Clear</button>
+            </div>
+          </div>
+        </div>
+        <div class="body-grid">
+          <div class="form-group" style="margin:0">
+            <label class="form-label">Player Name</label>
+            <input class="form-input" type="text" id="ef-name-${p.rank}" value="${escA(vacant?'':p.name)}" placeholder="Leave empty for N/A">
+          </div>
+          <div class="form-group" style="margin:0">
+            <label class="form-label">Description / Title</label>
+            <input class="form-input" type="text" id="ef-desc-${p.rank}" value="${escA(p.desc)}" placeholder="e.g. Clan Leader · Top Fragger">
+          </div>
+          <div class="form-group" style="margin:0">
+            <label class="form-label">
+              <svg style="width:11px;height:11px;fill:#E53935;vertical-align:middle;margin-right:4px" viewBox="0 0 24 24"><path d="M18.926 23.998 0 18.389 5.075.002 24 5.611zM15.348 10.06l-5.282-1.571-1.57 5.283 5.28 1.572z"/></svg>
+              Roblox Profile URL
+            </label>
+            <input class="form-input" type="text" id="ef-roblox-${p.rank}" value="${escA(p.roblox)}" placeholder="https://www.roblox.com/users/…">
+          </div>
+          <div class="form-group" style="margin:0">
+            <label class="form-label">
+              <svg style="width:11px;height:11px;fill:#5865F2;vertical-align:middle;margin-right:4px" viewBox="0 0 24 24"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03z"/></svg>
+              Discord Profile Link
+            </label>
+            <input class="form-input" type="text" id="ef-discord-${p.rank}" value="${escA(p.discord)}" placeholder="https://discord.com/users/…">
+          </div>
+        </div>
+        <div class="body-full">
+          <div class="form-group" style="margin:0">
+            <label class="form-label">🛡 Clan Discord Server Link</label>
+            <input class="form-input" type="text" id="ef-clan-${p.rank}" value="${escA(p.clanDiscord)}" placeholder="https://discord.gg/…">
+          </div>
+        </div>
+        <div class="row-footer">
+          <div class="row-save-status" id="save-status-${p.rank}">Not saved yet</div>
+          <div class="row-btns">
+            <button class="btn btn-sm btn-clear" onclick="clearEntry(${p.rank})">Clear to N/A</button>
+            <button class="btn btn-sm btn-save" onclick="saveEntry(${p.rank})">Save + Push</button>
+          </div>
+        </div>
+      </div>`;
+    container.appendChild(row);
+
+    // drag & drop
+    setupDragDrop(p.rank);
+  });
+
+  if (!container.children.length) {
+    container.innerHTML = '<div style="text-align:center;padding:30px;font-family:var(--font-mono);font-size:11px;color:var(--muted);letter-spacing:2px">NO ENTRIES MATCH FILTER</div>';
+  }
+}
+
+function toggleRow(rank) {
+  const row = document.getElementById('erow-'+rank);
+  if (!row) return;
+  // Close all others
+  document.querySelectorAll('.edit-row.open').forEach(r => { if(r!==row) r.classList.remove('open'); });
+  row.classList.toggle('open');
+  if (row.classList.contains('open')) {
+    setTimeout(()=>row.scrollIntoView({behavior:'smooth',block:'nearest'}),100);
+  }
+}
+
+// ── COLLECT INPUTS ────────────────────────────────────
+function collectAllInputs() {
+  players.forEach(p => {
+    const nameEl    = document.getElementById(`ef-name-${p.rank}`);
+    const descEl    = document.getElementById(`ef-desc-${p.rank}`);
+    const rblxEl    = document.getElementById(`ef-roblox-${p.rank}`);
+    const discEl    = document.getElementById(`ef-discord-${p.rank}`);
+    const clanEl    = document.getElementById(`ef-clan-${p.rank}`);
+    const imgEl     = document.getElementById(`ef-img-${p.rank}`);
+    if (nameEl)    p.name        = nameEl.value.trim() || 'N/A';
+    if (descEl)    p.desc        = descEl.value.trim();
+    if (rblxEl)    p.roblox      = rblxEl.value.trim();
+    if (discEl)    p.discord     = discEl.value.trim();
+    if (clanEl)    p.clanDiscord = clanEl.value.trim();
+    if (imgEl && !imgEl.value.startsWith('data:') === false) { /* already set */ }
+    if (imgEl)     p.img         = imgEl.value.trim() || p.img;
+  });
+}
+
+function collectEntry(rank) {
+  const p = players.find(x=>x.rank===rank);
+  if (!p) return;
+  const get = id => { const el = document.getElementById(id); return el ? el.value.trim() : ''; };
+  p.name        = get(`ef-name-${rank}`) || 'N/A';
+  p.desc        = get(`ef-desc-${rank}`);
+  p.roblox      = get(`ef-roblox-${rank}`);
+  p.discord     = get(`ef-discord-${rank}`);
+  p.clanDiscord = get(`ef-clan-${rank}`);
+  // img already updated on upload
+}
+
+// ── SAVE SINGLE ENTRY ─────────────────────────────────
+async function saveEntry(rank) {
+  collectEntry(rank);
+  // Update preview
+  const p = players.find(x=>x.rank===rank);
+  const vacant = !p.name || p.name==='N/A';
+  const prev = document.getElementById(`eprev-${rank}`);
+  if(prev){ prev.textContent = vacant?'N/A — Vacant':p.name; prev.className='row-name'+(vacant?' na':''); }
+  const row = document.getElementById(`erow-${rank}`);
+  if(row){ row.className = `edit-row${!vacant?' has-data':''} ${rank===1?'rank1':rank===2?'rank2':rank===3?'rank3':''}`; }
+  // Push
+  await saveAll();
+  document.getElementById(`save-status-${rank}`).textContent = 'Saved at ' + new Date().toLocaleTimeString('de-DE');
+  updateStats();
+}
+
+async function clearEntry(rank) {
+  const p = players.find(x=>x.rank===rank);
+  if (!p) return;
+  p.name='N/A'; p.desc=''; p.roblox=''; p.discord=''; p.clanDiscord=''; p.img='';
+  await saveAll();
+  renderRows();
+  updateStats();
+}
+
+// ── IMAGE HANDLING ────────────────────────────────────
+function handleImgFile(rank, input) {
+  if (!input.files[0]) return;
+  const file = input.files[0];
+  if (file.size > 600 * 1024) { toast('Image too large (max 500KB). Use a URL instead.', 'err'); return; }
+  const reader = new FileReader();
+  reader.onload = ev => {
+    const src = ev.target.result;
+    const p = players.find(x=>x.rank===rank);
+    if(p) p.img = src;
+    document.getElementById(`ef-img-${rank}`).value = src;
+    const prev = document.getElementById(`eprev-img-${rank}`);
+    if(prev) prev.innerHTML = `<img src="${src}" alt="">`;
+    const av = document.getElementById(`eav-${rank}`);
+    if(av) av.innerHTML = `<img src="${src}" alt="">`;
+    toast('Image loaded — save to push', 'info');
+  };
+  reader.readAsDataURL(file);
+}
+
+function previewImgUrl(rank) {
+  const url = document.getElementById(`ef-img-${rank}`)?.value?.trim();
+  if (!url) return;
+  const p = players.find(x=>x.rank===rank);
+  if(p) p.img = url;
+  const prev = document.getElementById(`eprev-img-${rank}`);
+  if(prev) prev.innerHTML = `<img src="${url}" alt="" onerror="this.parentElement.innerHTML='❌'">`;
+  const av = document.getElementById(`eav-${rank}`);
+  if(av) av.innerHTML = `<img src="${url}" alt="">`;
+}
+
+function clearImg(rank) {
+  const p = players.find(x=>x.rank===rank);
+  if(p) p.img='';
+  const imgEl = document.getElementById(`ef-img-${rank}`);
+  if(imgEl) imgEl.value='';
+  const prev = document.getElementById(`eprev-img-${rank}`);
+  if(prev) prev.innerHTML = '📷';
+  const av = document.getElementById(`eav-${rank}`);
+  if(av) { const pp = players.find(x=>x.rank===rank); av.innerHTML = (!pp||pp.name==='N/A')?'—':pp.name.charAt(0).toUpperCase(); }
+}
+
+function setupDragDrop(rank) {
+  const dz = document.getElementById(`dz-${rank}`);
+  if(!dz) return;
+  dz.addEventListener('dragover', e=>{ e.preventDefault(); dz.classList.add('drag'); });
+  dz.addEventListener('dragleave', ()=>dz.classList.remove('drag'));
+  dz.addEventListener('drop', e=>{ e.preventDefault(); dz.classList.remove('drag'); const f=e.dataTransfer.files[0]; if(f){ const fakeInput={files:[f]}; handleImgFile(rank,fakeInput); } });
+}
+
+// ── FILTER & SEARCH ───────────────────────────────────
+let filterActive = 'all';
+function setFilter(mode, btn) {
+  filterMode = mode;
+  document.querySelectorAll('.filter-tab').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderRows();
+}
+function filterRows() { renderRows(); }
+
+// ── STATS ─────────────────────────────────────────────
+function updateStats() {
+  const filled = players.filter(p=>p.name&&p.name!=='N/A').length;
+  const links  = players.reduce((a,p)=>a+[p.roblox,p.discord,p.clanDiscord].filter(Boolean).length,0);
+  const photos = players.filter(p=>p.img).length;
+  document.getElementById('statFilled').textContent = filled;
+  document.getElementById('statVacant').textContent = 30-filled;
+  document.getElementById('statLinks').textContent  = links;
+  document.getElementById('statPhotos').textContent = photos;
+}
+
+// ── STATUS ────────────────────────────────────────────
+function setStatus(type, label, dotClass) {
+  const dot = document.getElementById('statusDot');
+  const lbl = document.getElementById('statusLabel');
+  if(dot){ dot.style.background = type==='ok'?'var(--success)':type==='err'?'var(--danger)':'var(--muted)'; }
+  if(lbl) lbl.textContent = label;
+}
+function setCfgStatus(type, msg) {
+  const dot = document.getElementById('cfgDot');
+  const txt = document.getElementById('cfgStatus');
+  if(dot) dot.className = 'dot ' + (type==='ok'?'dot-ok':type==='err'?'dot-err':'dot-idle');
+  if(txt) txt.textContent = msg;
+}
+
+// ── SAVING OVERLAY ────────────────────────────────────
+function showSavingOverlay(msg) {
+  document.getElementById('savingOverlay').classList.add('show');
+  document.getElementById('saveOverlayText').textContent = msg;
+}
+function hideSavingOverlay() {
+  document.getElementById('savingOverlay').classList.remove('show');
+}
+
+// ── TOAST ─────────────────────────────────────────────
+function toast(msg, type='ok') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = `toast ${type} show`;
+  clearTimeout(t._t);
+  t._t = setTimeout(()=>{ t.className='toast'; }, 4000);
+}
+
+// ── UTILS ─────────────────────────────────────────────
+function escH(s=''){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function escA(s=''){return String(s).replace(/"/g,'&quot;');}
+</script>
+</body>
+</html>
