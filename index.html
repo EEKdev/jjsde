@@ -1,0 +1,1364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>JJS DE Leaderboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;700&family=Barlow+Condensed:wght@400;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+/* ═══════════════════════════════════════════════
+   GERMAN INDUSTRIAL THEME
+   Black + Gold + Red accents — Eisenwerk aesthetic
+═══════════════════════════════════════════════ */
+:root {
+  --bg:        #0a0a0b;
+  --surface:   #111113;
+  --card:      #161618;
+  --card-h:    #1c1c1f;
+  --border:    #2a2a2e;
+  --border2:   #333337;
+
+  --de-black:  #0a0a0b;
+  --de-red:    #cc0000;
+  --de-gold:   #d4a017;
+  --de-gold2:  #f0c040;
+  --de-silver: #909090;
+  --de-bronze: #8b5a2b;
+
+  --text:      #e8e8e8;
+  --text2:     #aaaaaa;
+  --muted:     #555560;
+
+  --accent:    #d4a017;
+  --accent-r:  #cc0000;
+  --success:   #22c55e;
+  --danger:    #ef4444;
+
+  --font-head: 'Oswald', sans-serif;
+  --font-body: 'Barlow Condensed', sans-serif;
+  --font-mono: 'IBM Plex Mono', monospace;
+}
+
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-weight: 400;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ── NOISE TEXTURE OVERLAY ── */
+body::before {
+  content:'';
+  position:fixed; inset:0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  opacity: 0.4;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ── GERMAN FLAG STRIPE TOP ── */
+.flag-stripe {
+  position: fixed; top: 0; left: 0; right: 0;
+  height: 4px;
+  background: linear-gradient(90deg,
+    #000 0%, #000 33.3%,
+    var(--de-red) 33.3%, var(--de-red) 66.6%,
+    var(--de-gold) 66.6%, var(--de-gold) 100%
+  );
+  z-index: 1000;
+}
+
+/* ── HEADER ── */
+header {
+  position: relative; z-index: 10;
+  padding: 56px 24px 36px;
+  text-align: center;
+  border-bottom: 1px solid var(--border);
+  background: linear-gradient(180deg, rgba(212,160,23,0.04) 0%, transparent 100%);
+  overflow: hidden;
+}
+
+/* Iron cross watermark */
+header::after {
+  content: '✠';
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%,-50%);
+  font-size: 320px;
+  color: rgba(212,160,23,0.025);
+  pointer-events: none;
+  user-select: none;
+  line-height: 1;
+}
+
+.header-de-badge {
+  display: inline-flex; align-items: center; gap: 10px;
+  background: rgba(204,0,0,0.1);
+  border: 1px solid rgba(204,0,0,0.3);
+  border-left: 3px solid var(--de-red);
+  color: #ff4444;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 3px;
+  padding: 5px 14px;
+  margin-bottom: 20px;
+  text-transform: uppercase;
+}
+
+.flag-mini {
+  display: inline-flex; flex-direction: column;
+  gap: 1.5px; width: 18px;
+}
+.flag-mini span {
+  display: block; height: 4px; border-radius: 1px;
+}
+
+header h1 {
+  font-family: var(--font-head);
+  font-weight: 700;
+  font-size: clamp(38px, 9vw, 88px);
+  letter-spacing: 6px;
+  text-transform: uppercase;
+  color: var(--text);
+  line-height: 0.95;
+  margin-bottom: 6px;
+  position: relative; z-index: 1;
+}
+
+header h1 span {
+  color: var(--de-gold);
+}
+
+.header-sub {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin-top: 10px;
+  position: relative; z-index: 1;
+}
+
+.live-indicator {
+  display: inline-flex; align-items: center; gap: 7px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--success);
+  letter-spacing: 2px;
+  margin-top: 14px;
+  position: relative; z-index: 1;
+}
+.live-dot {
+  width: 6px; height: 6px;
+  background: var(--success);
+  border-radius: 50%;
+  animation: blink 1.8s infinite;
+}
+@keyframes blink {
+  0%,100% { opacity:1; box-shadow:0 0 0 0 rgba(34,197,94,.5); }
+  50%      { opacity:.6; box-shadow:0 0 0 5px rgba(34,197,94,0); }
+}
+
+/* ── TABS ── */
+.tab-nav {
+  position: relative; z-index: 10;
+  display: flex; justify-content: center;
+  padding: 32px 20px 0;
+  gap: 0;
+}
+
+.tab-btn {
+  background: var(--card);
+  border: 1px solid var(--border);
+  color: var(--muted);
+  font-family: var(--font-head);
+  font-weight: 600;
+  font-size: 15px;
+  letter-spacing: 3px;
+  padding: 13px 36px;
+  cursor: pointer;
+  transition: all .18s;
+  text-transform: uppercase;
+  position: relative;
+}
+.tab-btn:first-child { border-radius: 2px 0 0 2px; }
+.tab-btn:last-child  { border-radius: 0 2px 2px 0; }
+.tab-btn + .tab-btn  { border-left: none; }
+
+.tab-btn::after {
+  content:'';
+  position:absolute; bottom:0; left:0; right:0; height:2px;
+  background: var(--de-gold);
+  transform: scaleX(0);
+  transition: transform .2s;
+}
+.tab-btn.active {
+  background: var(--card-h);
+  color: var(--de-gold);
+  border-color: var(--border2);
+}
+.tab-btn.active::after { transform: scaleX(1); }
+.tab-btn:hover:not(.active) { background: var(--card-h); color: var(--text2); }
+
+/* ── MAIN ── */
+main {
+  position: relative; z-index: 10;
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 36px 16px 100px;
+}
+
+/* ── SECTION HEADER ── */
+.section-header {
+  display: flex; align-items: center; gap: 16px;
+  margin-bottom: 20px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--border);
+}
+.section-title {
+  font-family: var(--font-head);
+  font-size: 22px;
+  letter-spacing: 4px;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--text);
+}
+.section-range {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--de-gold);
+  background: rgba(212,160,23,0.08);
+  border: 1px solid rgba(212,160,23,0.2);
+  padding: 3px 10px;
+  letter-spacing: 1px;
+}
+
+/* ── LEADERBOARD CARDS ── */
+.lb-list { display: flex; flex-direction: column; gap: 6px; }
+
+.lb-card {
+  display: grid;
+  grid-template-columns: 54px 60px 1fr auto;
+  align-items: center;
+  gap: 14px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--border);
+  padding: 13px 18px;
+  transition: all .2s;
+  position: relative;
+  overflow: hidden;
+  animation: cardIn .3s ease both;
+}
+@keyframes cardIn {
+  from { opacity:0; transform:translateX(-8px); }
+  to   { opacity:1; transform:translateX(0); }
+}
+.lb-card:hover {
+  border-color: var(--border2);
+  border-left-color: var(--de-gold);
+  background: var(--card-h);
+}
+.lb-card.rank-1 { border-left-color: var(--de-gold2); background: linear-gradient(90deg, rgba(212,160,23,0.06) 0%, var(--card) 50%); }
+.lb-card.rank-2 { border-left-color: var(--de-silver); background: linear-gradient(90deg, rgba(144,144,144,0.04) 0%, var(--card) 50%); }
+.lb-card.rank-3 { border-left-color: var(--de-bronze); background: linear-gradient(90deg, rgba(139,90,43,0.04) 0%, var(--card) 50%); }
+.lb-card.na-card { opacity: .38; }
+.lb-card.na-card:hover { opacity: .55; border-left-color: var(--border); }
+
+/* RANK */
+.lb-rank {
+  font-family: var(--font-head);
+  font-size: 22px;
+  font-weight: 700;
+  text-align: center;
+  color: var(--muted);
+  letter-spacing: 1px;
+}
+.lb-card.rank-1 .lb-rank { color: var(--de-gold2); }
+.lb-card.rank-2 .lb-rank { color: var(--de-silver); }
+.lb-card.rank-3 .lb-rank { color: var(--de-bronze); }
+
+/* AVATAR */
+.lb-avatar {
+  width: 52px; height: 52px;
+  border-radius: 2px;
+  border: 1px solid var(--border2);
+  overflow: hidden;
+  flex-shrink: 0;
+  background: var(--surface);
+  display: flex; align-items: center; justify-content: center;
+}
+.lb-avatar img { width:100%; height:100%; object-fit:cover; }
+.lb-avatar.empty {
+  border-style: dashed;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--border2);
+  text-align: center;
+  line-height: 1.4;
+}
+
+/* INFO */
+.lb-info { min-width: 0; }
+.lb-name {
+  font-family: var(--font-head);
+  font-weight: 600;
+  font-size: 19px;
+  letter-spacing: 1.5px;
+  color: var(--text);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  text-transform: uppercase;
+}
+.lb-name.na { color: var(--muted); font-style: italic; font-weight: 400; }
+.lb-socials {
+  display: flex; flex-wrap: wrap; gap: 6px;
+  margin-top: 5px;
+}
+.lb-tag {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  padding: 2px 8px;
+  border-radius: 1px;
+  white-space: nowrap;
+  max-width: 190px;
+  overflow: hidden; text-overflow: ellipsis;
+  text-decoration: none;
+  transition: opacity .15s;
+}
+.lb-tag:hover { opacity: .75; }
+.lb-tag.rblx { color: #e8a020; background: rgba(232,160,32,0.08); border: 1px solid rgba(232,160,32,0.2); }
+.lb-tag.disc { color: #7289da; background: rgba(114,137,218,0.08); border: 1px solid rgba(114,137,218,0.2); }
+.lb-tag.clan { color: var(--de-gold); background: rgba(212,160,23,0.08); border: 1px solid rgba(212,160,23,0.2); }
+
+/* EXTRA */
+.lb-extra {
+  text-align: right; min-width: 80px;
+}
+.lb-clan-tag {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 1px;
+}
+
+/* ── SECTIONS ── */
+.lb-section { display: none; }
+.lb-section.active { display: block; }
+
+/* ── ADMIN FAB ── */
+.admin-fab {
+  position: fixed; bottom: 24px; right: 24px;
+  z-index: 500;
+  background: var(--card);
+  border: 1px solid var(--border2);
+  color: var(--text2);
+  font-family: var(--font-head);
+  font-weight: 600;
+  font-size: 13px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 11px 22px;
+  cursor: pointer;
+  border-radius: 2px;
+  transition: all .2s;
+  display: flex; align-items: center; gap: 8px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+}
+.admin-fab:hover {
+  background: var(--card-h);
+  border-color: var(--de-gold);
+  color: var(--de-gold);
+}
+.admin-fab svg { width:15px; height:15px; }
+
+/* ── OVERLAYS ── */
+.overlay {
+  display: none;
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.88);
+  backdrop-filter: blur(10px);
+  z-index: 600;
+  align-items: center; justify-content: center;
+  padding: 16px;
+}
+.overlay.open { display: flex; }
+
+.modal {
+  background: var(--surface);
+  border: 1px solid var(--border2);
+  border-top: 3px solid var(--de-gold);
+  border-radius: 2px;
+  width: 100%; max-width: 440px;
+  padding: 32px;
+  position: relative;
+  box-shadow: 0 32px 80px rgba(0,0,0,0.7);
+  animation: modalIn .22s ease;
+}
+@keyframes modalIn {
+  from { transform:translateY(16px); opacity:0; }
+  to   { transform:translateY(0); opacity:1; }
+}
+
+.modal-close {
+  position: absolute; top: 14px; right: 14px;
+  background: none; border: none;
+  color: var(--muted); cursor: pointer; font-size: 18px;
+  transition: color .15s;
+}
+.modal-close:hover { color: var(--text); }
+
+.modal h2 {
+  font-family: var(--font-head);
+  font-size: 26px; letter-spacing: 4px;
+  text-transform: uppercase; font-weight: 700;
+  margin-bottom: 24px; color: var(--text);
+}
+.modal h2 span { color: var(--de-gold); }
+
+/* ADMIN PANEL */
+.admin-panel {
+  max-width: 860px;
+  max-height: 92vh;
+  overflow-y: auto;
+}
+.admin-panel::-webkit-scrollbar { width: 4px; }
+.admin-panel::-webkit-scrollbar-thumb { background: var(--border2); }
+
+/* ── FORMS ── */
+.form-group { margin-bottom: 14px; }
+.form-label {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 10px; font-weight: 700;
+  letter-spacing: 2px; text-transform: uppercase;
+  color: var(--muted); margin-bottom: 6px;
+}
+.form-input {
+  width: 100%;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 15px; font-weight: 400;
+  padding: 9px 13px;
+  outline: none;
+  border-radius: 1px;
+  transition: border-color .15s;
+}
+.form-input:focus { border-color: var(--de-gold); }
+.form-input::placeholder { color: var(--muted); }
+
+/* GITHUB CONFIG FIELDS */
+.gh-config-box {
+  background: rgba(212,160,23,0.05);
+  border: 1px solid rgba(212,160,23,0.15);
+  border-left: 3px solid var(--de-gold);
+  padding: 16px;
+  margin-bottom: 20px;
+  border-radius: 1px;
+}
+.gh-config-box p {
+  font-family: var(--font-mono);
+  font-size: 10px; color: var(--muted);
+  margin-bottom: 12px; line-height: 1.6;
+  letter-spacing: .5px;
+}
+
+/* BUTTONS */
+.btn {
+  display: inline-flex; align-items: center; gap: 7px;
+  font-family: var(--font-head); font-weight: 600;
+  font-size: 13px; letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 10px 22px;
+  border: none; cursor: pointer;
+  transition: all .18s;
+  border-radius: 1px;
+}
+.btn-primary {
+  background: var(--de-gold);
+  color: #000;
+}
+.btn-primary:hover { background: var(--de-gold2); }
+.btn-secondary {
+  background: transparent;
+  border: 1px solid var(--border2);
+  color: var(--text2);
+}
+.btn-secondary:hover { border-color: var(--de-gold); color: var(--de-gold); }
+.btn-danger {
+  background: transparent;
+  border: 1px solid rgba(239,68,68,0.3);
+  color: var(--danger);
+}
+.btn-danger:hover { background: rgba(239,68,68,0.1); }
+.btn-full { width: 100%; justify-content: center; }
+.btn-row { display: flex; gap: 8px; margin-top: 20px; flex-wrap: wrap; }
+
+/* RANK CHIPS */
+.rank-chips {
+  display: flex; flex-wrap: wrap; gap: 5px;
+  margin-bottom: 20px;
+}
+.rank-chip {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 10px; padding: 5px 10px;
+  cursor: pointer; transition: all .13s;
+  border-radius: 1px;
+}
+.rank-chip.filled { border-color: rgba(212,160,23,0.3); color: rgba(212,160,23,0.7); }
+.rank-chip.sel {
+  background: rgba(212,160,23,0.12);
+  border-color: var(--de-gold);
+  color: var(--de-gold);
+}
+
+/* EDITOR GRID */
+.editor-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+@media(max-width:540px){ .editor-grid { grid-template-columns:1fr; } }
+
+/* AVATAR UPLOAD */
+.avatar-zone {
+  border: 2px dashed var(--border2);
+  border-radius: 2px;
+  padding: 16px;
+  text-align: center;
+  cursor: pointer;
+  transition: all .18s;
+  position: relative;
+  margin-bottom: 16px;
+}
+.avatar-zone:hover { border-color: var(--de-gold); background: rgba(212,160,23,0.03); }
+.avatar-zone input[type=file] {
+  position: absolute; inset: 0;
+  opacity: 0; cursor: pointer;
+  width: 100%; height: 100%;
+}
+.az-preview {
+  width: 60px; height: 60px;
+  border-radius: 2px; object-fit: cover;
+  margin: 0 auto 8px; display: block;
+  border: 1px solid var(--border2);
+}
+.az-label {
+  font-family: var(--font-mono);
+  font-size: 10px; color: var(--muted);
+  line-height: 1.5;
+}
+
+/* SAVE STATUS */
+.save-status {
+  font-family: var(--font-mono);
+  font-size: 10px; letter-spacing: 1px;
+  padding: 6px 12px;
+  border-radius: 1px;
+  margin-top: 10px;
+  display: none;
+}
+.save-status.ok  { display:block; color: var(--success); background: rgba(34,197,94,.07); border:1px solid rgba(34,197,94,.2); }
+.save-status.err { display:block; color: var(--danger);  background: rgba(239,68,68,.07);  border:1px solid rgba(239,68,68,.2); }
+.save-status.loading { display:block; color: var(--de-gold); background: rgba(212,160,23,.07); border:1px solid rgba(212,160,23,.2); }
+
+/* LOGIN ERROR */
+.login-err { display:none; color:var(--danger); font-family:var(--font-mono); font-size:11px; margin-top:8px; }
+.login-err.show { display:block; }
+
+/* ADMIN BADGE */
+.admin-badge {
+  display: none;
+  position: fixed; top: 12px; right: 16px;
+  z-index: 600;
+  background: rgba(212,160,23,0.1);
+  border: 1px solid rgba(212,160,23,0.3);
+  color: var(--de-gold);
+  font-family: var(--font-mono);
+  font-size: 9px; letter-spacing: 2px;
+  padding: 5px 12px;
+}
+.admin-badge.show { display: block; }
+
+/* TOAST */
+.toast {
+  position: fixed; bottom: 76px; left: 50%;
+  transform: translateX(-50%);
+  background: var(--card);
+  font-family: var(--font-mono);
+  font-size: 11px; letter-spacing: 1px;
+  padding: 9px 22px;
+  z-index: 800; opacity: 0;
+  transition: opacity .25s;
+  pointer-events: none;
+  border-radius: 1px;
+  white-space: nowrap;
+}
+.toast.ok  { border:1px solid rgba(34,197,94,.4);  color:var(--success); opacity:1; }
+.toast.err { border:1px solid rgba(239,68,68,.4);  color:var(--danger);  opacity:1; }
+.toast.inf { border:1px solid rgba(212,160,23,.4); color:var(--de-gold); opacity:1; }
+
+/* FOOTER */
+footer {
+  position: relative; z-index: 10;
+  text-align: center;
+  border-top: 1px solid var(--border);
+  padding: 20px;
+  font-family: var(--font-mono);
+  font-size: 10px; color: var(--muted);
+  letter-spacing: 2px;
+}
+
+/* LOADING SKELETON */
+.skeleton {
+  background: linear-gradient(90deg, var(--card) 25%, var(--card-h) 50%, var(--card) 75%);
+  background-size: 400% 100%;
+  animation: shimmer 1.4s infinite;
+  border-radius: 2px;
+  height: 72px;
+}
+@keyframes shimmer {
+  0%   { background-position: 100% 0; }
+  100% { background-position: -100% 0; }
+}
+
+/* DIVIDER */
+.divider { height:1px; background:var(--border); margin:20px 0; }
+
+/* GITHUB SETUP NOTICE */
+.gh-notice {
+  background: rgba(212,160,23,0.06);
+  border: 1px solid rgba(212,160,23,0.18);
+  border-left: 3px solid var(--de-gold);
+  padding: 14px 18px;
+  margin-bottom: 24px;
+  font-family: var(--font-mono);
+  font-size: 11px; color: var(--text2);
+  line-height: 1.7; letter-spacing: .3px;
+  display: none;
+}
+.gh-notice.show { display: block; }
+.gh-notice strong { color: var(--de-gold); }
+
+/* RESPONSIVE */
+@media(max-width:680px){
+  .lb-card { grid-template-columns: 44px 50px 1fr; gap:10px; padding:10px 12px; }
+  .lb-extra { display:none; }
+  .lb-rank { font-size:18px; }
+  .lb-avatar { width:44px; height:44px; }
+  .lb-name { font-size:16px; }
+  .tab-btn { padding:11px 20px; font-size:13px; letter-spacing:2px; }
+}
+@media(max-width:400px){
+  .tab-btn { padding:9px 12px; font-size:12px; letter-spacing:1px; }
+  header h1 { letter-spacing:2px; }
+}
+
+/* scrollbar */
+::-webkit-scrollbar { width:5px; height:5px; }
+::-webkit-scrollbar-track { background:transparent; }
+::-webkit-scrollbar-thumb { background:var(--border2); border-radius:2px; }
+</style>
+</head>
+<body>
+
+<div class="flag-stripe"></div>
+<div class="admin-badge" id="adminBadge">● ADMIN</div>
+
+<!-- ═══ HEADER ═══ -->
+<header>
+  <div class="header-de-badge">
+    <div class="flag-mini">
+      <span style="background:#111"></span>
+      <span style="background:#cc0000"></span>
+      <span style="background:#d4a017"></span>
+    </div>
+    Deutschland Region · Official
+  </div>
+  <h1>JJS <span>DE</span> Leaderboard</h1>
+  <div class="header-sub">Jailbreak Japan Server · Germany Region Rankings</div>
+  <div class="live-indicator"><span class="live-dot"></span>Live · Auto-Sync Enabled</div>
+</header>
+
+<!-- ═══ TABS ═══ -->
+<nav class="tab-nav">
+  <button class="tab-btn active" data-tab="t10" onclick="switchTab('t10')">Top 1–10</button>
+  <button class="tab-btn" data-tab="t20" onclick="switchTab('t20')">Top 11–20</button>
+  <button class="tab-btn" data-tab="t30" onclick="switchTab('t21')">Top 21–30</button>
+</nav>
+
+<!-- ═══ MAIN ═══ -->
+<main>
+  <div id="gh-notice" class="gh-notice">
+    <strong>⚙ GitHub not configured.</strong> Open Admin panel → Settings tab to enter your GitHub repo details. Data will then save globally to your <code>data.json</code> file.
+  </div>
+
+  <div class="lb-section active" id="sec-t10">
+    <div class="section-header">
+      <span class="section-title">Top Rankings</span>
+      <span class="section-range">#1 — #10</span>
+    </div>
+    <div class="lb-list" id="list-t10"></div>
+  </div>
+
+  <div class="lb-section" id="sec-t20">
+    <div class="section-header">
+      <span class="section-title">Rankings</span>
+      <span class="section-range">#11 — #20</span>
+    </div>
+    <div class="lb-list" id="list-t20"></div>
+  </div>
+
+  <div class="lb-section" id="sec-t21">
+    <div class="section-header">
+      <span class="section-title">Rankings</span>
+      <span class="section-range">#21 — #30</span>
+    </div>
+    <div class="lb-list" id="list-t21"></div>
+  </div>
+</main>
+
+<footer>JJS DE Leaderboard &nbsp;·&nbsp; Germany Region &nbsp;·&nbsp; Data saved to GitHub</footer>
+
+<!-- ═══ ADMIN FAB ═══ -->
+<button class="admin-fab" id="adminFab" onclick="openLoginOrAdmin()">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+    <rect x="3" y="11" width="18" height="11" rx="1"/>
+    <path d="M7 11V7a5 5 0 0110 0v4"/>
+  </svg>
+  Admin
+</button>
+
+<!-- ═══ TOAST ═══ -->
+<div class="toast" id="toast"></div>
+
+<!-- ═══ LOGIN MODAL ═══ -->
+<div class="overlay" id="loginOverlay">
+  <div class="modal" style="max-width:380px;">
+    <button class="modal-close" onclick="closeOverlay('loginOverlay')">✕</button>
+    <h2>Admin <span>Login</span></h2>
+    <div class="form-group">
+      <label class="form-label">Username</label>
+      <input class="form-input" id="loginUser" type="text" placeholder="Username" autocomplete="off"/>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Password</label>
+      <input class="form-input" id="loginPass" type="password" placeholder="Password"/>
+    </div>
+    <div class="login-err" id="loginErr">Invalid credentials.</div>
+    <div class="btn-row" style="margin-top:18px;">
+      <button class="btn btn-primary btn-full" onclick="doLogin()">Enter</button>
+    </div>
+    <p style="margin-top:14px;font-family:var(--font-mono);font-size:10px;color:var(--muted);">Default: <strong style="color:var(--de-gold)">admin</strong> / <strong style="color:var(--de-gold)">jjs2024</strong></p>
+  </div>
+</div>
+
+<!-- ═══ ADMIN PANEL MODAL ═══ -->
+<div class="overlay" id="adminOverlay">
+  <div class="modal admin-panel">
+    <button class="modal-close" onclick="closeOverlay('adminOverlay')">✕</button>
+    <h2>Admin <span>Panel</span></h2>
+
+    <!-- Sub-tabs -->
+    <div style="display:flex;gap:6px;margin-bottom:22px;">
+      <button class="btn btn-secondary" id="atab-edit" onclick="setAdminTab('edit')" style="font-size:11px;padding:7px 16px;">Edit Players</button>
+      <button class="btn btn-secondary" id="atab-settings" onclick="setAdminTab('settings')" style="font-size:11px;padding:7px 16px;">⚙ Settings</button>
+    </div>
+
+    <div id="admin-edit-panel">
+      <div class="rank-chips" id="rankChips"></div>
+      <div id="editorArea"></div>
+    </div>
+
+    <div id="admin-settings-panel" style="display:none;">
+      <div class="gh-config-box">
+        <p>Enter your GitHub details to enable global saving to <strong style="color:var(--de-gold)">data.json</strong>.<br/>
+        The PAT needs <strong>repo</strong> scope. It is stored only in your browser's localStorage.</p>
+        <div class="form-group">
+          <label class="form-label">GitHub Username / Org</label>
+          <input class="form-input" id="ghOwner" type="text" placeholder="e.g. yourusername"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Repository Name</label>
+          <input class="form-input" id="ghRepo" type="text" placeholder="e.g. jjs-de-leaderboard"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Branch</label>
+          <input class="form-input" id="ghBranch" type="text" placeholder="main"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Personal Access Token (PAT)</label>
+          <input class="form-input" id="ghToken" type="password" placeholder="ghp_..."/>
+        </div>
+        <div class="btn-row" style="margin-top:12px;">
+          <button class="btn btn-primary" onclick="saveGhConfig()">Save Config</button>
+          <button class="btn btn-secondary" onclick="testGhConfig()">Test Connection</button>
+        </div>
+        <div class="save-status" id="ghStatus"></div>
+      </div>
+
+      <div class="divider"></div>
+      <p style="font-family:var(--font-mono);font-size:10px;color:var(--muted);line-height:1.8;">
+        <strong style="color:var(--text2)">How auto-save works:</strong><br/>
+        When you click "Save Changes" on any player, the leaderboard writes directly to your <code>data.json</code> via the GitHub API.<br/>
+        Any visitor who loads the page fetches <code>data.json</code> fresh — so changes are globally visible immediately.
+      </p>
+
+      <div class="divider"></div>
+      <div class="form-group">
+        <label class="form-label">Change Admin Password</label>
+        <input class="form-input" id="newPass" type="password" placeholder="New password"/>
+      </div>
+      <button class="btn btn-secondary" onclick="changePass()">Update Password</button>
+    </div>
+
+    <div class="btn-row" style="margin-top:24px;border-top:1px solid var(--border);padding-top:20px;">
+      <button class="btn btn-danger" onclick="doLogout()">Logout</button>
+      <button class="btn btn-secondary" onclick="closeOverlay('adminOverlay')">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     JAVASCRIPT
+═══════════════════════════════════════════════ -->
+<script>
+// ── CONFIG ─────────────────────────────────────
+const DATA_FILE    = 'data.json';
+const ADMIN_STORE  = 'jjs_admin_cfg';
+const DATA_STORE   = 'jjs_data_v4';
+const GH_STORE     = 'jjs_gh_cfg';
+
+// Admin credentials (stored in localStorage so they can be changed)
+function getAdminCreds() {
+  try {
+    const c = localStorage.getItem(ADMIN_STORE);
+    return c ? JSON.parse(c) : { username:'admin', password:'jjs2024' };
+  } catch(e) { return { username:'admin', password:'jjs2024' }; }
+}
+function saveAdminCreds(obj) {
+  localStorage.setItem(ADMIN_STORE, JSON.stringify(obj));
+}
+
+// GitHub config
+function getGhCfg() {
+  try { return JSON.parse(localStorage.getItem(GH_STORE)) || {}; } catch(e) { return {}; }
+}
+function saveGhCfg(cfg) { localStorage.setItem(GH_STORE, JSON.stringify(cfg)); }
+
+// ── DATA ───────────────────────────────────────
+function emptyPlayer(rank) {
+  return { rank, name:'N/A', roblox:'', discord:'', discordProfile:'', clan:'', clanDiscord:'', avatar:'' };
+}
+
+function defaultData() {
+  const players = [];
+  for (let i = 1; i <= 30; i++) players.push(emptyPlayer(i));
+  return { players, lastUpdated: '' };
+}
+
+let leaderboard = [];
+let adminLoggedIn = false;
+let currentRank = 1;
+let currentAdminTab = 'edit';
+
+// ── INIT ───────────────────────────────────────
+async function init() {
+  // Show skeletons
+  renderSkeletons();
+
+  // Try fetch data.json from same origin (GitHub Pages)
+  let loaded = false;
+  try {
+    const res = await fetch(DATA_FILE + '?t=' + Date.now());
+    if (res.ok) {
+      const json = await res.json();
+      leaderboard = json.players;
+      // Ensure all 30 exist
+      for (let i = leaderboard.length + 1; i <= 30; i++) leaderboard.push(emptyPlayer(i));
+      // Cache locally
+      localStorage.setItem(DATA_STORE, JSON.stringify({ players: leaderboard }));
+      loaded = true;
+    }
+  } catch(e) {}
+
+  // Fallback: local cache
+  if (!loaded) {
+    try {
+      const raw = localStorage.getItem(DATA_STORE);
+      if (raw) leaderboard = JSON.parse(raw).players;
+    } catch(e) {}
+  }
+
+  if (!leaderboard || leaderboard.length < 30) {
+    leaderboard = defaultData().players;
+  }
+
+  // Check GitHub configured
+  const cfg = getGhCfg();
+  if (!cfg.owner || !cfg.repo || !cfg.token) {
+    // Show notice only if data couldn't be loaded from server
+    if (!loaded) document.getElementById('gh-notice').classList.add('show');
+  }
+
+  renderAll();
+}
+
+// ── RENDER ─────────────────────────────────────
+function renderSkeletons() {
+  ['list-t10','list-t20','list-t21'].forEach(id => {
+    const el = document.getElementById(id);
+    el.innerHTML = Array(10).fill(`<div class="skeleton" style="margin-bottom:6px;"></div>`).join('');
+  });
+}
+
+function renderAll() {
+  render('list-t10',  1,  10);
+  render('list-t20', 11, 20);
+  render('list-t21', 21, 30);
+}
+
+function render(listId, from, to) {
+  const el = document.getElementById(listId);
+  el.innerHTML = '';
+  for (let i = from; i <= to; i++) {
+    const p = leaderboard[i-1];
+    const card = makeCard(p, i);
+    card.style.animationDelay = ((i - from) * 0.04) + 's';
+    el.appendChild(card);
+  }
+}
+
+function makeCard(p, rank) {
+  const na = (!p.name || p.name === 'N/A');
+  const div = document.createElement('div');
+  const rankClass = rank <= 3 ? ` rank-${rank}` : '';
+  const naClass   = na ? ' na-card' : '';
+  div.className = `lb-card${rankClass}${naClass}`;
+
+  const medals = ['🥇','🥈','🥉'];
+  const rankTxt = rank <= 3 ? medals[rank-1] : `#${rank}`;
+
+  const avatar = p.avatar
+    ? `<div class="lb-avatar"><img src="${p.avatar}" alt="" loading="lazy"/></div>`
+    : `<div class="lb-avatar empty">NO<br>PHOTO</div>`;
+
+  let tags = '';
+  if (!na) {
+    if (p.roblox)         tags += `<span class="lb-tag rblx">🎮 ${x(p.roblox)}</span>`;
+    if (p.discord)        tags += `<span class="lb-tag disc">💬 ${x(p.discord)}</span>`;
+    if (p.discordProfile) tags += `<a class="lb-tag disc" href="${x(p.discordProfile)}" target="_blank" rel="noopener">🔗 Discord</a>`;
+    if (p.clanDiscord)    tags += `<a class="lb-tag clan" href="${x(p.clanDiscord)}" target="_blank" rel="noopener">🛡 Clan Server</a>`;
+  }
+
+  div.innerHTML = `
+    <div class="lb-rank">${rankTxt}</div>
+    ${avatar}
+    <div class="lb-info">
+      <div class="lb-name${na?' na':''}">${na ? 'N/A' : x(p.name)}</div>
+      <div class="lb-socials">${tags}</div>
+    </div>
+    <div class="lb-extra">
+      <div class="lb-clan-tag">${p.clan ? x(p.clan) : ''}</div>
+    </div>`;
+  return div;
+}
+
+function x(s) {
+  return String(s||'')
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ── TABS ───────────────────────────────────────
+function switchTab(tab) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
+  document.querySelectorAll('.lb-section').forEach(s => s.classList.remove('active'));
+  document.getElementById('sec-'+tab).classList.add('active');
+}
+
+// ── LOGIN ──────────────────────────────────────
+function openLoginOrAdmin() {
+  if (adminLoggedIn) { openAdminPanel(); return; }
+  openOverlay('loginOverlay');
+}
+
+function doLogin() {
+  const u = document.getElementById('loginUser').value.trim();
+  const p = document.getElementById('loginPass').value;
+  const creds = getAdminCreds();
+  const err = document.getElementById('loginErr');
+  if (u === creds.username && p === creds.password) {
+    adminLoggedIn = true;
+    err.classList.remove('show');
+    closeOverlay('loginOverlay');
+    document.getElementById('adminBadge').classList.add('show');
+    document.getElementById('adminFab').innerHTML = `
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4 12.5-12.5z"/>
+      </svg> Edit`;
+    openAdminPanel();
+  } else {
+    err.classList.add('show');
+  }
+}
+
+function doLogout() {
+  adminLoggedIn = false;
+  closeOverlay('adminOverlay');
+  document.getElementById('adminBadge').classList.remove('show');
+  document.getElementById('adminFab').innerHTML = `
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <rect x="3" y="11" width="18" height="11" rx="1"/>
+      <path d="M7 11V7a5 5 0 0110 0v4"/>
+    </svg> Admin`;
+  showToast('Logged out.', 'ok');
+}
+
+// ── ADMIN PANEL ────────────────────────────────
+function openAdminPanel() {
+  loadGhForm();
+  buildChips();
+  setAdminTab('edit');
+  selectRank(currentRank);
+  openOverlay('adminOverlay');
+}
+
+function setAdminTab(tab) {
+  currentAdminTab = tab;
+  document.getElementById('admin-edit-panel').style.display     = tab === 'edit'     ? '' : 'none';
+  document.getElementById('admin-settings-panel').style.display = tab === 'settings' ? '' : 'none';
+  document.getElementById('atab-edit').style.borderColor     = tab === 'edit'     ? 'var(--de-gold)' : '';
+  document.getElementById('atab-edit').style.color           = tab === 'edit'     ? 'var(--de-gold)' : '';
+  document.getElementById('atab-settings').style.borderColor = tab === 'settings' ? 'var(--de-gold)' : '';
+  document.getElementById('atab-settings').style.color       = tab === 'settings' ? 'var(--de-gold)' : '';
+}
+
+function buildChips() {
+  const wrap = document.getElementById('rankChips');
+  wrap.innerHTML = '';
+  for (let i = 1; i <= 30; i++) {
+    const p = leaderboard[i-1];
+    const filled = p.name && p.name !== 'N/A';
+    const chip = document.createElement('button');
+    chip.className = `rank-chip${filled?' filled':''}${i===currentRank?' sel':''}`;
+    chip.textContent = `#${i}`;
+    chip.title = filled ? p.name : 'N/A';
+    chip.onclick = () => selectRank(i);
+    wrap.appendChild(chip);
+  }
+}
+
+function selectRank(rank) {
+  currentRank = rank;
+  document.querySelectorAll('.rank-chip').forEach((c,i) => {
+    c.classList.toggle('sel', i+1 === rank);
+  });
+  buildEditor(rank);
+}
+
+function buildEditor(rank) {
+  const p = leaderboard[rank-1];
+  const area = document.getElementById('editorArea');
+  const hasAvatar = !!p.avatar;
+
+  area.innerHTML = `
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:18px;">
+      <span style="font-family:var(--font-head);font-size:38px;font-weight:700;color:var(--de-gold);letter-spacing:2px;">#${rank}</span>
+      <span style="font-family:var(--font-mono);font-size:10px;color:var(--muted);letter-spacing:1px;">EDITING ENTRY</span>
+    </div>
+
+    <div class="avatar-zone" id="avatarZone">
+      <input type="file" id="avatarInput" accept="image/*" onchange="handleAvatar(event)"/>
+      ${hasAvatar
+        ? `<img class="az-preview" id="azPreview" src="${p.avatar}" alt=""/>`
+        : `<div id="azPreview" style="display:none"></div>`
+      }
+      <div class="az-label" id="azLabel" ${hasAvatar?'style="display:none"':''}>
+        📷 Click to upload photo<br/>
+        <span style="font-size:9px;opacity:.5;">JPG / PNG / WEBP — max ~1MB</span>
+      </div>
+    </div>
+    ${hasAvatar ? `<button class="btn btn-danger" style="margin-bottom:14px;font-size:11px;padding:5px 14px;" onclick="clearAvatar()">✕ Remove Photo</button>` : ''}
+
+    <div class="editor-grid">
+      <div class="form-group">
+        <label class="form-label">Player Name</label>
+        <input class="form-input" id="eName" type="text" value="${x(p.name==='N/A'?'':p.name)}" placeholder="Leave blank for N/A"/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Clan / Team Tag</label>
+        <input class="form-input" id="eClan" type="text" value="${x(p.clan)}" placeholder="e.g. [JJS]"/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Roblox Username</label>
+        <input class="form-input" id="eRoblox" type="text" value="${x(p.roblox)}" placeholder="Roblox username"/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Discord Username</label>
+        <input class="form-input" id="eDiscord" type="text" value="${x(p.discord)}" placeholder="user or @user"/>
+      </div>
+      <div class="form-group" style="grid-column:1/-1">
+        <label class="form-label">Discord Profile Link</label>
+        <input class="form-input" id="eDiscordProfile" type="url" value="${x(p.discordProfile)}" placeholder="https://discord.com/users/123..."/>
+      </div>
+      <div class="form-group" style="grid-column:1/-1">
+        <label class="form-label">Clan Discord Server Link</label>
+        <input class="form-input" id="eClanDiscord" type="url" value="${x(p.clanDiscord)}" placeholder="https://discord.gg/..."/>
+      </div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="saveEntry(${rank})" id="saveBtn">Save & Publish</button>
+      <button class="btn btn-danger" onclick="clearEntry(${rank})">Clear / N/A</button>
+    </div>
+    <div class="save-status" id="saveStatus"></div>
+  `;
+}
+
+function handleAvatar(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  // Warn if large
+  if (file.size > 1_200_000) {
+    showToast('Image may be too large for GitHub (>1MB)', 'err');
+  }
+  const reader = new FileReader();
+  reader.onload = ev => {
+    const data = ev.target.result;
+    leaderboard[currentRank-1].avatar = data;
+    const prev = document.getElementById('azPreview');
+    if (prev.tagName === 'IMG') {
+      prev.src = data;
+      prev.style.display = 'block';
+    } else {
+      // Replace placeholder
+      const img = document.createElement('img');
+      img.className = 'az-preview';
+      img.id = 'azPreview';
+      img.src = data;
+      prev.replaceWith(img);
+    }
+    document.getElementById('azLabel').style.display = 'none';
+  };
+  reader.readAsDataURL(file);
+}
+
+function clearAvatar() {
+  leaderboard[currentRank-1].avatar = '';
+  buildEditor(currentRank);
+}
+
+async function saveEntry(rank) {
+  const p = leaderboard[rank-1];
+  const name = document.getElementById('eName').value.trim();
+  p.name           = name || 'N/A';
+  p.clan           = document.getElementById('eClan').value.trim();
+  p.roblox         = document.getElementById('eRoblox').value.trim();
+  p.discord        = document.getElementById('eDiscord').value.trim();
+  p.discordProfile = document.getElementById('eDiscordProfile').value.trim();
+  p.clanDiscord    = document.getElementById('eClanDiscord').value.trim();
+
+  setStatus('loading', '⏳ Saving to GitHub...');
+  document.getElementById('saveBtn').disabled = true;
+
+  // Save to GitHub
+  const ok = await pushToGitHub();
+
+  document.getElementById('saveBtn').disabled = false;
+
+  if (ok) {
+    setStatus('ok', `✓ Rank #${rank} saved and published globally.`);
+    showToast(`#${rank} saved globally ✓`, 'ok');
+    // Update local cache too
+    localStorage.setItem(DATA_STORE, JSON.stringify({ players: leaderboard }));
+  } else {
+    // Still save locally as fallback
+    localStorage.setItem(DATA_STORE, JSON.stringify({ players: leaderboard }));
+    setStatus('err', '⚠ GitHub not configured — saved locally only. Set up GitHub in Settings.');
+    showToast('Saved locally (GitHub not configured)', 'inf');
+  }
+
+  renderAll();
+  buildChips();
+}
+
+function clearEntry(rank) {
+  leaderboard[rank-1] = emptyPlayer(rank);
+  buildEditor(rank);
+  buildChips();
+  renderAll();
+  // Auto-save
+  saveEntry(rank);
+}
+
+function setStatus(type, msg) {
+  const el = document.getElementById('saveStatus');
+  if (!el) return;
+  el.className = `save-status ${type}`;
+  el.textContent = msg;
+}
+
+// ── GITHUB API ─────────────────────────────────
+async function pushToGitHub() {
+  const cfg = getGhCfg();
+  if (!cfg.owner || !cfg.repo || !cfg.token) return false;
+
+  const branch = cfg.branch || 'main';
+  const path   = DATA_FILE;
+  const apiUrl = `https://api.github.com/repos/${cfg.owner}/${cfg.repo}/contents/${path}`;
+  const headers = {
+    'Authorization': `token ${cfg.token}`,
+    'Accept': 'application/vnd.github.v3+json',
+    'Content-Type': 'application/json'
+  };
+
+  try {
+    // 1. Get current SHA
+    let sha = null;
+    const getRes = await fetch(`${apiUrl}?ref=${branch}`, { headers });
+    if (getRes.ok) {
+      const getJson = await getRes.json();
+      sha = getJson.sha;
+    } else if (getRes.status !== 404) {
+      return false;
+    }
+
+    // 2. Build content
+    const payload = {
+      players: leaderboard,
+      lastUpdated: new Date().toISOString()
+    };
+    const content = btoa(unescape(encodeURIComponent(JSON.stringify(payload, null, 2))));
+
+    // 3. PUT
+    const body = {
+      message: `Update leaderboard - ${new Date().toLocaleString('de-DE')}`,
+      content,
+      branch
+    };
+    if (sha) body.sha = sha;
+
+    const putRes = await fetch(apiUrl, {
+      method: 'PUT',
+      headers,
+      body: JSON.stringify(body)
+    });
+
+    return putRes.ok || putRes.status === 201;
+  } catch(e) {
+    console.error('GitHub push failed:', e);
+    return false;
+  }
+}
+
+// ── GITHUB SETTINGS ────────────────────────────
+function loadGhForm() {
+  const cfg = getGhCfg();
+  document.getElementById('ghOwner').value  = cfg.owner  || '';
+  document.getElementById('ghRepo').value   = cfg.repo   || '';
+  document.getElementById('ghBranch').value = cfg.branch || 'main';
+  document.getElementById('ghToken').value  = cfg.token  || '';
+}
+
+function saveGhConfig() {
+  const cfg = {
+    owner:  document.getElementById('ghOwner').value.trim(),
+    repo:   document.getElementById('ghRepo').value.trim(),
+    branch: document.getElementById('ghBranch').value.trim() || 'main',
+    token:  document.getElementById('ghToken').value.trim()
+  };
+  saveGhCfg(cfg);
+  document.getElementById('gh-notice').classList.remove('show');
+  showGhStatus('ok', '✓ Config saved.');
+  showToast('GitHub config saved', 'ok');
+}
+
+async function testGhConfig() {
+  const cfg = getGhCfg();
+  if (!cfg.owner || !cfg.repo || !cfg.token) {
+    showGhStatus('err', '✗ Fill in all fields first.');
+    return;
+  }
+  showGhStatus('loading', '⏳ Testing connection...');
+  try {
+    const res = await fetch(
+      `https://api.github.com/repos/${cfg.owner}/${cfg.repo}`,
+      { headers: { 'Authorization': `token ${cfg.token}` } }
+    );
+    if (res.ok) {
+      showGhStatus('ok', '✓ Connection successful! Repo found.');
+    } else {
+      showGhStatus('err', `✗ Failed (${res.status}). Check owner, repo name, and PAT.`);
+    }
+  } catch(e) {
+    showGhStatus('err', '✗ Network error. Check token and repo details.');
+  }
+}
+
+function showGhStatus(type, msg) {
+  const el = document.getElementById('ghStatus');
+  el.className = `save-status ${type}`;
+  el.textContent = msg;
+}
+
+function changePass() {
+  const np = document.getElementById('newPass').value;
+  if (!np || np.length < 4) { showToast('Password too short (min 4 chars)', 'err'); return; }
+  const creds = getAdminCreds();
+  creds.password = np;
+  saveAdminCreds(creds);
+  document.getElementById('newPass').value = '';
+  showToast('Password updated ✓', 'ok');
+}
+
+// ── OVERLAY HELPERS ────────────────────────────
+function openOverlay(id) {
+  document.getElementById(id).classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeOverlay(id) {
+  document.getElementById(id).classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+// ── TOAST ──────────────────────────────────────
+let toastTimer;
+function showToast(msg, type='ok') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = `toast ${type}`;
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => { t.className = 'toast'; }, 3000);
+}
+
+// ── KEYBOARD ───────────────────────────────────
+document.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && document.getElementById('loginOverlay').classList.contains('open')) doLogin();
+  if (e.key === 'Escape') {
+    closeOverlay('loginOverlay');
+    closeOverlay('adminOverlay');
+  }
+});
+
+// ── AUTO-REFRESH (poll every 60s if not admin) ──
+setInterval(() => {
+  if (!adminLoggedIn) init();
+}, 60000);
+
+// ── START ──────────────────────────────────────
+init();
+</script>
+</body>
+</html>
