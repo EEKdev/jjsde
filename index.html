@@ -3,16 +3,16 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<meta name="description" content="JJS DE Leaderboard — Top 30 Players, Season 2026">
+<meta name="description" content="JJS DE Leaderboard - Top 30 Players, Season 2026">
 <meta property="og:title" content="JJS DE Leaderboard">
-<meta property="og:description" content="Official Germany JJS Leaderboard — Season 2026">
+<meta property="og:description" content="Official Germany JJS Leaderboard - Season 2026">
 <title>JJS DE Leaderboard</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Outfit:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-/* ════════════════════════════════════════════
+/* ============================================
    ROOT & RESET
-════════════════════════════════════════════ */
+============================================ */
 :root{
   --black:#000000;--red:#CC0000;--red-bright:#FF1A1A;--gold:#FFCC00;--gold-dim:#C9A000;
   --bg:#07070e;--bg2:#0d0d18;--surface:#111120;--surface2:#181828;--surface3:#1f1f33;
@@ -32,9 +32,9 @@ a{color:inherit;text-decoration:none}
 img{display:block;max-width:100%}
 button{cursor:pointer;font-family:inherit}
 
-/* ════════════════════════════════════════════
+/* ============================================
    BACKGROUND
-════════════════════════════════════════════ */
+============================================ */
 .bg-fx{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
 .bg-fx::before{
   content:'';position:absolute;inset:0;
@@ -50,14 +50,14 @@ button{cursor:pointer;font-family:inherit}
 }
 .bg-stripe{position:fixed;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#000000 33.33%,#CC0000 33.33% 66.66%,#FFCC00 66.66%);z-index:500}
 
-/* ════════════════════════════════════════════
+/* ============================================
    LAYOUT
-════════════════════════════════════════════ */
+============================================ */
 .page{position:relative;z-index:1;max-width:900px;margin:0 auto;padding:0 20px 80px}
 
-/* ════════════════════════════════════════════
+/* ============================================
    HEADER
-════════════════════════════════════════════ */
+============================================ */
 .site-header{padding:56px 0 32px;text-align:center}
 .flag-wrap{display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:14px}
 .de-flag{display:flex;flex-direction:column;width:32px;height:22px;border-radius:3px;overflow:hidden;box-shadow:0 0 0 1px rgba(255,255,255,0.1);flex-shrink:0}
@@ -79,25 +79,25 @@ button{cursor:pointer;font-family:inherit}
 .meta-row{text-align:center;margin:16px 0 32px;font-family:var(--font-mono);font-size:9.5px;letter-spacing:2px;color:var(--muted)}
 .meta-row span{color:var(--text2)}
 
-/* ════════════════════════════════════════════
+/* ============================================
    SEGMENT TABS
-════════════════════════════════════════════ */
+============================================ */
 .seg-tabs{display:flex;justify-content:center;gap:6px;margin-bottom:28px;padding:5px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);max-width:380px;margin-left:auto;margin-right:auto}
 .seg-tab{flex:1;padding:10px 14px;background:transparent;border:none;border-radius:var(--radius);color:var(--muted);font-family:var(--font-display);font-size:15px;font-weight:600;letter-spacing:1px;transition:all .22s;-webkit-tap-highlight-color:transparent}
 .seg-tab:hover{color:var(--text2)}
 .seg-tab.active{background:linear-gradient(135deg,var(--red),#8B0000);color:#fff;box-shadow:0 3px 18px rgba(204,0,0,0.4)}
 .seg-tab .sub{display:block;font-size:9px;font-weight:400;letter-spacing:1px;opacity:.65;font-family:var(--font-mono);margin-top:1px}
 
-/* ════════════════════════════════════════════
+/* ============================================
    SECTION
-════════════════════════════════════════════ */
+============================================ */
 .lb-section{display:none}
 .lb-section.active{display:block;animation:sectionIn .3s ease}
 @keyframes sectionIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 
-/* ════════════════════════════════════════════
+/* ============================================
    CARD
-════════════════════════════════════════════ */
+============================================ */
 .lb-list{display:flex;flex-direction:column;gap:7px}
 
 .lb-card{
@@ -159,20 +159,20 @@ button{cursor:pointer;font-family:inherit}
 .skel-card{height:82px;border-radius:var(--radius);background:linear-gradient(90deg,var(--surface) 25%,var(--surface2) 50%,var(--surface) 75%);background-size:200% 100%;animation:shimmer 1.4s infinite}
 @keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
 
-/* ════════════════════════════════════════════
+/* ============================================
    ADMIN LINK
-════════════════════════════════════════════ */
+============================================ */
 .admin-link{position:fixed;top:16px;right:18px;z-index:400;background:var(--surface2);border:1px solid var(--border2);color:var(--muted);font-family:var(--font-mono);font-size:9px;letter-spacing:2px;text-transform:uppercase;padding:8px 14px;border-radius:7px;transition:all .2s;display:flex;align-items:center;gap:6px;text-decoration:none}
 .admin-link:hover{border-color:var(--red);color:var(--red)}
 
-/* ════════════════════════════════════════════
+/* ============================================
    FOOTER
-════════════════════════════════════════════ */
+============================================ */
 footer{text-align:center;padding:40px 0 20px;font-family:var(--font-mono);font-size:9px;letter-spacing:2px;color:var(--muted);text-transform:uppercase}
 
-/* ════════════════════════════════════════════
+/* ============================================
    RESPONSIVE
-════════════════════════════════════════════ */
+============================================ */
 @media(max-width:600px){
   .lb-card{grid-template-columns:40px 46px 1fr;gap:10px;padding:11px 14px}
   .social-col{display:none}
@@ -215,18 +215,18 @@ footer{text-align:center;padding:40px 0 20px;font-family:var(--font-mono);font-s
     <div class="season-badge"><span class="season-dot"></span>Season 2026 Active</div>
   </header>
 
-  <div class="meta-row" id="metaRow">Last updated: <span id="lastUpdated">Loading…</span></div>
+  <div class="meta-row" id="metaRow">Last updated: <span id="lastUpdated">Loading...</span></div>
 
   <!-- SEGMENT TABS -->
   <div class="seg-tabs" role="tablist">
     <button class="seg-tab active" role="tab" onclick="switchTab('s10',this)" aria-selected="true">
-      Top 10<span class="sub">Rank 1–10</span>
+      Top 10<span class="sub">Rank 1-10</span>
     </button>
     <button class="seg-tab" role="tab" onclick="switchTab('s20',this)" aria-selected="false">
-      Top 20<span class="sub">Rank 11–20</span>
+      Top 20<span class="sub">Rank 11-20</span>
     </button>
     <button class="seg-tab" role="tab" onclick="switchTab('s30',this)" aria-selected="false">
-      Top 30<span class="sub">Rank 21–30</span>
+      Top 30<span class="sub">Rank 21-30</span>
     </button>
   </div>
 
@@ -239,14 +239,14 @@ footer{text-align:center;padding:40px 0 20px;font-family:var(--font-mono);font-s
 <footer>© 2026 JJS DE Leaderboard · All Rights Reserved</footer>
 
 <script>
-// ── CONFIG ──────────────────────────────────────────
+// -- CONFIG ------------------------------------------
 // Replace with your actual GitHub username and repo name after setup
 const REPO_OWNER = 'YOUR_GITHUB_USERNAME';
 const REPO_NAME  = 'jjs-leaderboard';
 const DATA_FILE  = 'data.json';
 const CACHE_BUST = () => `?t=${Date.now()}`;
 
-// ── TAB SWITCHING ────────────────────────────────────
+// -- TAB SWITCHING ------------------------------------
 function switchTab(id, btn) {
   document.querySelectorAll('.seg-tab').forEach(b => { b.classList.remove('active'); b.setAttribute('aria-selected','false'); });
   document.querySelectorAll('.lb-section').forEach(s => s.classList.remove('active'));
@@ -255,7 +255,7 @@ function switchTab(id, btn) {
   document.getElementById(id).classList.add('active');
 }
 
-// ── FETCH DATA ───────────────────────────────────────
+// -- FETCH DATA ---------------------------------------
 async function fetchData() {
   showSkeletons();
   try {
@@ -282,7 +282,7 @@ function showError() {
   });
 }
 
-// ── RENDER ────────────────────────────────────────────
+// -- RENDER --------------------------------------------
 function renderAll(json) {
   const players = json.players || [];
 
@@ -290,7 +290,7 @@ function renderAll(json) {
   const upd = json.meta?.lastUpdated;
   document.getElementById('lastUpdated').textContent = upd
     ? new Date(upd).toLocaleString('de-DE',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'}) + ' Uhr'
-    : '—';
+    : '-';
 
   const ranges = [[1,10,'list10'],[11,20,'list20'],[21,30,'list30']];
   ranges.forEach(([start,end,listId]) => {
@@ -304,7 +304,7 @@ function renderAll(json) {
 }
 
 function rankClass(r) { return r===1?'r1':r===2?'r2':r===3?'r3':''; }
-function rankIcon(r)  { return r===1?'🥇':r===2?'🥈':r===3?'🥉':null; }
+function rankIcon(r)  { return r===1?'#1':r===2?'#2':r===3?'#3':null; }
 function stripeColor(r) {
   if(r===1)  return '#FFCC00';
   if(r===2)  return '#C0C0C0';
@@ -320,7 +320,7 @@ function socLink(cls, svgIcon, url, tip) {
   if (safeUrl) {
     return `<a class="soc ${cls}" href="${safeUrl}" target="_blank" rel="noopener noreferrer" data-tip="${tip}" onclick="event.stopPropagation()" aria-label="${tip}">${svgIcon}</a>`;
   }
-  return `<span class="soc ${cls} off" data-tip="${tip} — not set" aria-label="${tip} not set">${svgIcon}</span>`;
+  return `<span class="soc ${cls} off" data-tip="${tip} - not set" aria-label="${tip} not set">${svgIcon}</span>`;
 }
 
 const ROBLOX_SVG = `<svg viewBox="0 0 24 24"><path d="M18.926 23.998 0 18.389 5.075.002 24 5.611zM15.348 10.06l-5.282-1.571-1.57 5.283 5.28 1.572z"/></svg>`;
@@ -333,7 +333,7 @@ function cardHTML(p, animIdx) {
   const cls      = rankClass(p.rank);
   const avatarIn = p.img
     ? `<img src="${p.img}" alt="${escH(p.name)}" loading="lazy">`
-    : (vacant ? '<span style="opacity:.3">—</span>' : `<span>${escH(p.name.charAt(0).toUpperCase())}</span>`);
+    : (vacant ? '<span style="opacity:.3">-</span>' : `<span>${escH(p.name.charAt(0).toUpperCase())}</span>`);
 
   const socHtml = `
     ${socLink('roblox', ROBLOX_SVG, p.roblox, 'Roblox Profile')}
@@ -346,7 +346,7 @@ function cardHTML(p, animIdx) {
     <div class="avatar">${avatarIn}</div>
     <div class="lb-info">
       <div class="player-name${vacant?' na-name':''}">${vacant ? 'N/A' : escH(p.name)}</div>
-      <div class="player-desc">${p.desc ? escH(p.desc) : '<span style="opacity:.3">—</span>'}</div>
+      <div class="player-desc">${p.desc ? escH(p.desc) : '<span style="opacity:.3">-</span>'}</div>
       <div class="social-mobile">${socHtml}</div>
     </div>
     <div class="social-col">${socHtml}</div>
@@ -357,7 +357,7 @@ function escH(s='') {
   return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 
-// ── AUTO REFRESH every 30s ────────────────────────────
+// -- AUTO REFRESH every 30s ----------------------------
 fetchData();
 setInterval(fetchData, 30000);
 </script>
